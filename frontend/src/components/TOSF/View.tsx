@@ -36,9 +36,9 @@ export function View() {
 		}
 	};
 
-	// eslint-disable-next-line
 	useEffect(() => {
 		fetchTOSF(match.params.id);
+		// eslint-disable-next-line
 	}, []);
 
 	const deleteTOSF = async ({ id }: TOSF) => {
@@ -90,17 +90,11 @@ export function View() {
 													<h5 className='modal-title' id={`deleteModalLabelTOSF`}>
 														Delete TOSF
 													</h5>
-													<button
-														type='button'
-														className='close'
-														data-dismiss='modal'
-														aria-label='Close'>
+													<button type='button' className='close' data-dismiss='modal' aria-label='Close'>
 														<span aria-hidden='true'>&times;</span>
 													</button>
 												</div>
-												<div className='modal-body'>
-													Are you sure you want to delete this TOSF?
-												</div>
+												<div className='modal-body'>Are you sure you want to delete this TOSF?</div>
 												<div className='modal-footer'>
 													<button
 														type='button'
@@ -113,10 +107,7 @@ export function View() {
 														}}>
 														Confirm
 													</button>
-													<button
-														type='button'
-														className='btn btn-secondary btn-sm'
-														data-dismiss='modal'>
+													<button type='button' className='btn btn-secondary btn-sm' data-dismiss='modal'>
 														Cancel
 													</button>
 												</div>

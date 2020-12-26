@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 import { Login } from './components/Auth/Login';
 import { Register } from './components/Auth/Register';
@@ -49,7 +49,6 @@ export function App() {
 						<Route path={routes.DASHBOARD} component={Dashboard} />
 						<Route path={routes.LOGIN} component={Login} />
 						<Route path={routes.REGISTER} component={Register} />
-						{/* <Redirect to={routes.LOGIN} /> */}
 					</UserContext.Provider>
 				</Switch>
 			</Router>

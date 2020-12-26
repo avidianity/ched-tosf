@@ -64,6 +64,7 @@ export function Nav(props: Props) {
 				<li className='nav-item d-xl-none'>
 					<div
 						onClick={() => {
+							// Argon's backdrop and click for nav
 							$('.backdrop.d-xl-none[data-action="sidenav-unpin"]').remove();
 							$('.bodyClick').remove();
 							const div = document.createElement('div');

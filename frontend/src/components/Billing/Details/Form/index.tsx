@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { FormMode, BillingFormRow, BillingForm } from '../../../../contracts';
+import { FormMode, BillingDetailRow, BillingDetail } from '../../../../contracts';
 import { handleError, exceptMany } from '../../../../helpers';
 import { Rows } from './Rows';
 
@@ -20,20 +20,19 @@ export function Form() {
 	const [total, setTotal] = useState('');
 	const [preparedBy, setPreparedBy] = useState('');
 	const [certifiedBy, setCertifiedBy] = useState('');
-	const [certifiedBySecond, setCertifiedBySecond] = useState('');
 	const [approvedBy, setApprovedBy] = useState('');
-	const [rows, setRows] = useState<Array<Partial<BillingFormRow>>>([]);
+	const [rows, setRows] = useState<Array<Partial<BillingDetailRow>>>([]);
 	const history = useHistory();
 
-	const submitRows = async (billingForm: BillingForm) => {
+	const submitRows = async (BillingDetail: BillingDetail) => {
 		if (mode === 'Edit') {
-			await axios.delete(`/billing/forms/row/${billingForm.id}/billing`);
+			await axios.delete(`/billing/details/row/${BillingDetail.id}/billing`);
 		}
 		await Promise.all(
 			rows.map((row) =>
-				axios.post<BillingFormRow>('/billing/forms/row', {
+				axios.post<BillingDetailRow>('/billing/details/row', {
 					...row,
-					formId: billingForm.id,
+					detailId: BillingDetail.id,
 				})
 			)
 		);
@@ -52,14 +51,13 @@ export function Form() {
 				total,
 				preparedBy,
 				certifiedBy,
-				certifiedBySecond,
 				approvedBy,
 			};
 			const { data } = await (mode === 'Add'
-				? axios.post<BillingForm>('/billing/forms', payload)
-				: axios.put<BillingForm>(`/billing/forms/${id}`, payload));
+				? axios.post<BillingDetail>('/billing/details', payload)
+				: axios.put<BillingDetail>(`/billing/details/${id}`, payload));
 			await submitRows(data);
-			toastr.success('Billing Form saved successfully.');
+			toastr.success('Billing Detail saved successfully.');
 		} catch (error) {
 			handleError(error);
 		} finally {
@@ -67,7 +65,7 @@ export function Form() {
 		}
 	};
 
-	const fetchBillingForm = async (billingFormID: string) => {
+	const fetchBillingDetail = async (billingDetailID: string) => {
 		setMode('Edit');
 		try {
 			const {
@@ -81,12 +79,11 @@ export function Form() {
 					total,
 					preparedBy,
 					certifiedBy,
-					certifiedBySecond,
 					approvedBy,
 					rows,
 					id,
 				},
-			} = await axios.get<BillingForm>(`/billing/forms/${billingFormID}`);
+			} = await axios.get<BillingDetail>(`/billing/details/${billingDetailID}`);
 			setID(id);
 			setSchool(school);
 			setSchoolAddress(schoolAddress);
@@ -97,7 +94,6 @@ export function Form() {
 			setTotal(total);
 			setPreparedBy(preparedBy);
 			setCertifiedBy(certifiedBy);
-			setCertifiedBySecond(certifiedBySecond);
 			setApprovedBy(approvedBy);
 			setRows([...exceptMany(rows, ['createdAt', 'updatedAt'])]);
 		} catch (error) {
@@ -110,7 +106,7 @@ export function Form() {
 
 	useEffect(() => {
 		if (path.includes('edit')) {
-			fetchBillingForm(params.id);
+			fetchBillingDetail(params.id);
 		}
 		// eslint-disable-next-line
 	}, []);
@@ -118,7 +114,7 @@ export function Form() {
 	return (
 		<div className='row pb-5'>
 			<div className='col-12'>
-				<h1>{mode} Billing Form</h1>
+				<h1>{mode} Billing Detail</h1>
 			</div>
 			<div className='col-12'>
 				<hr className='mt-2 mb-3' />
@@ -246,25 +242,6 @@ export function Form() {
 								disabled={processing}
 								value={certifiedBy}
 								onChange={(e) => setCertifiedBy(e.target.value)}
-							/>
-						</div>
-						<div className='col-12 col-md-6 col-lg-4 p-2'>
-							<label htmlFor='certifiedBySecond'>
-								Certified By{' '}
-								<sup>
-									<b>(2nd)</b>
-								</sup>
-								:
-							</label>
-							<input
-								type='text'
-								name='certifiedBySecond'
-								id='certifiedBySecond'
-								placeholder='Certified By (2nd)'
-								className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
-								disabled={processing}
-								value={certifiedBySecond}
-								onChange={(e) => setCertifiedBySecond(e.target.value)}
 							/>
 						</div>
 						<div className='col-12 col-md-6 col-lg-4 p-2'>

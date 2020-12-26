@@ -62,11 +62,11 @@ export function Form() {
 
 	const { params, path } = useRouteMatch<{ id: string }>();
 
-	// eslint-disable-next-line
 	useEffect(() => {
 		if (path.includes('edit')) {
 			fetchStatement(params.id);
 		}
+		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -294,7 +294,7 @@ export function Form() {
 							</div>
 						</div>
 						<div className='col-12 p-2'>
-							<button type='submit' className='btn btn-info btn-sm'>
+							<button type='submit' className={`btn btn-info btn-sm ${processing ? 'disabled' : ''}`} disabled={processing}>
 								{processing ? (
 									<div className='flex'>
 										Saving... <i className='fas fa-circle-notch fa-spin'></i>

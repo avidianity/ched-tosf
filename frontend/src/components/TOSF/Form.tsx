@@ -60,9 +60,7 @@ export function Form() {
 				certifiedBy,
 				approvedBy,
 			};
-			const { data } = await (mode === 'Add'
-				? axios.post<TOSF>('/tosfs', payload)
-				: axios.put<TOSF>(`/tosfs/${id}`, payload));
+			const { data } = await (mode === 'Add' ? axios.post<TOSF>('/tosfs', payload) : axios.put<TOSF>(`/tosfs/${id}`, payload));
 			await submitFees(data);
 			toastr.success('TOSF saved successfully.');
 		} catch (error) {
@@ -127,12 +125,12 @@ export function Form() {
 
 	const { params, path } = useRouteMatch<{ id: string }>();
 
-	// eslint-disable-next-line
 	useEffect(() => {
 		fetchDegrees();
 		if (path.includes('edit')) {
 			fetchTOSF(params.id);
 		}
+		// eslint-disable-next-line
 	}, []);
 
 	return (
@@ -141,8 +139,8 @@ export function Form() {
 				<h1>{mode} TOSF</h1>
 			</div>
 			<div className='col-12'>
-				<b>NOTE:</b> If a degree you are looking for does not exist in the checkboxes, please add them to the
-				textbox below. They will be saved for future inputs.
+				<b>NOTE:</b> If a degree you are looking for does not exist in the checkboxes, please add them to the textbox below. They
+				will be saved for future inputs.
 				<form
 					className='p-1 d-flex form-inline'
 					onSubmit={(e) => {
@@ -296,9 +294,7 @@ export function Form() {
 															<select
 																name={`type${index + 1}`}
 																id={`type${index + 1}`}
-																className={`form-control form-control-sm ${
-																	processing ? 'disabled' : ''
-																}`}
+																className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 																disabled={processing}
 																value={fee.type}
 																onChange={(e) => {
@@ -315,12 +311,8 @@ export function Form() {
 																<option value='Handbook Fee'>Handbook Fee</option>
 																<option value='Laboratory Fee'>Laboratory Fee</option>
 																<option value='Library Fee'>Library Fee</option>
-																<option value='Medical & Dental Fee'>
-																	Medical & Dental Fee
-																</option>
-																<option value='Registration Fee'>
-																	Registration Fee
-																</option>
+																<option value='Medical & Dental Fee'>Medical & Dental Fee</option>
+																<option value='Registration Fee'>Registration Fee</option>
 																<option value='Admission Fee'>Admission Fee</option>
 																<option value='Entrance Fee'>Entrance Fee</option>
 															</select>
@@ -331,25 +323,17 @@ export function Form() {
 																<div className='custom-control custom-checkbox'>
 																	<input
 																		type='checkbox'
-																		className={`custom-control-input ${
-																			processing ? 'disabled' : ''
-																		}`}
+																		className={`custom-control-input ${processing ? 'disabled' : ''}`}
 																		disabled={processing}
 																		id={`fee${index}degree${degreeIndex}`}
 																		value={degree}
 																		onChange={(e) => {
 																			if (fee.degrees) {
-																				if (
-																					!fee.degrees.includes(
-																						e.target.value
-																					)
-																				) {
+																				if (!fee.degrees.includes(e.target.value)) {
 																					fee.degrees.push(e.target.value);
 																				} else {
 																					fee.degrees.splice(
-																						fee.degrees.indexOf(
-																							e.target.value
-																						),
+																						fee.degrees.indexOf(e.target.value),
 																						1
 																					);
 																				}
@@ -372,9 +356,7 @@ export function Form() {
 															<select
 																name='year'
 																id='year'
-																className={`form-control form-control-sm ${
-																	processing ? 'disabled' : ''
-																}`}
+																className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 																disabled={processing}
 																value={fee.year}
 																onChange={(e) => {
@@ -382,23 +364,13 @@ export function Form() {
 																	fees.splice(index, 1, fee);
 																	setFees([...fees]);
 																}}>
-																{[
-																	2015,
-																	2016,
-																	2017,
-																	2018,
-																	2019,
-																	2020,
-																	2021,
-																	2022,
-																	2023,
-																	2024,
-																	2025,
-																].map((year, index) => (
-																	<option value={year} key={index}>
-																		{year}
-																	</option>
-																))}
+																{[2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025].map(
+																	(year, index) => (
+																		<option value={year} key={index}>
+																			{year}
+																		</option>
+																	)
+																)}
 															</select>
 														</div>
 														<div className='col-12 col-md-4 col-lg-3 form-group'>
@@ -408,9 +380,7 @@ export function Form() {
 																name='costPerUnit'
 																id='costPerUnit'
 																placeholder='Cost per Unit'
-																className={`form-control form-control-sm ${
-																	processing ? 'disabled' : ''
-																}`}
+																className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 																disabled={processing}
 																value={fee.costPerUnit}
 																onChange={(e) => {
@@ -427,9 +397,7 @@ export function Form() {
 																name='coverage'
 																id='coverage'
 																placeholder='Coverage'
-																className={`form-control form-control-sm ${
-																	processing ? 'disabled' : ''
-																}`}
+																className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 																disabled={processing}
 																value={fee.coverage}
 																onChange={(e) => {
@@ -446,9 +414,7 @@ export function Form() {
 																name='frequencyPerAY'
 																id='frequencyPerAY'
 																placeholder='Frequency per AY'
-																className={`form-control form-control-sm ${
-																	processing ? 'disabled' : ''
-																}`}
+																className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 																disabled={processing}
 																value={fee.frequencyPerAY}
 																onChange={(e) => {
@@ -465,9 +431,7 @@ export function Form() {
 																name='referenceNumber'
 																id='referenceNumber'
 																placeholder='Reference Number'
-																className={`form-control form-control-sm ${
-																	processing ? 'disabled' : ''
-																}`}
+																className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 																disabled={processing}
 																value={fee.referenceNumber}
 																onChange={(e) => {
@@ -484,9 +448,7 @@ export function Form() {
 																name='dateOfApproval'
 																id='dateOfApproval'
 																placeholder='Date of Approval'
-																className={`form-control form-control-sm ${
-																	processing ? 'disabled' : ''
-																}`}
+																className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 																disabled={processing}
 																value={dayjs(fee.dateOfApproval).format('YYYY-MM-DD')}
 																onChange={(e) => {
@@ -504,9 +466,7 @@ export function Form() {
 																name='description'
 																id='description'
 																placeholder='Description'
-																className={`form-control form-control-sm ${
-																	processing ? 'disabled' : ''
-																}`}
+																className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 																disabled={processing}
 																value={fee.description}
 																onChange={(e) => {
@@ -525,7 +485,7 @@ export function Form() {
 							</div>
 						</div>
 						<div className='col-12 p-2'>
-							<button type='submit' className='btn btn-info btn-sm'>
+							<button type='submit' className={`btn btn-info btn-sm ${processing ? 'disabled' : ''}`} disabled={processing}>
 								{processing ? (
 									<div className='flex'>
 										Saving... <i className='fas fa-circle-notch fa-spin'></i>

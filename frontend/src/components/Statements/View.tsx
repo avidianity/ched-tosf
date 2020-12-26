@@ -22,9 +22,9 @@ export function View() {
 		}
 	};
 
-	// eslint-disable-next-line
 	useEffect(() => {
 		fetchStatement(match.params.id);
+		// eslint-disable-next-line
 	}, []);
 
 	const deleteStatement = async ({ id }: Statement) => {
@@ -76,17 +76,11 @@ export function View() {
 													<h5 className='modal-title' id={`deleteModalLabelStatement`}>
 														Delete Statement
 													</h5>
-													<button
-														type='button'
-														className='close'
-														data-dismiss='modal'
-														aria-label='Close'>
+													<button type='button' className='close' data-dismiss='modal' aria-label='Close'>
 														<span aria-hidden='true'>&times;</span>
 													</button>
 												</div>
-												<div className='modal-body'>
-													Are you sure you want to delete this Statement?
-												</div>
+												<div className='modal-body'>Are you sure you want to delete this Statement?</div>
 												<div className='modal-footer'>
 													<button
 														type='button'
@@ -94,17 +88,12 @@ export function View() {
 														onClick={(e) => {
 															e.preventDefault();
 															const modal = $(`#deleteModalStatement`) as any;
-															modal.on('hidden.bs.modal', () =>
-																deleteStatement(statement)
-															);
+															modal.on('hidden.bs.modal', () => deleteStatement(statement));
 															modal.modal('hide');
 														}}>
 														Confirm
 													</button>
-													<button
-														type='button'
-														className='btn btn-secondary btn-sm'
-														data-dismiss='modal'>
+													<button type='button' className='btn btn-secondary btn-sm' data-dismiss='modal'>
 														Cancel
 													</button>
 												</div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { BillingDetails } from './Details';
 import { BillingForms } from './Forms';
 import { Menu } from './Menu';
 
@@ -10,6 +11,7 @@ export function Billing() {
 		<Switch>
 			<Route path={path('/')} exact component={Menu} />
 			<Route path={path('/forms')} component={BillingForms} />
+			<Route path={path('/details')} component={BillingDetails} />
 		</Switch>
 	);
 }

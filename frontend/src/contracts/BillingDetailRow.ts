@@ -7,7 +7,7 @@ export interface BillingDetailRow extends Model {
 	givenName: string;
 	middleInitial: string;
 	sex: string;
-	birthday: Date;
+	birthday: string;
 	degreeProgram: string;
 	year: string;
 	email: string;

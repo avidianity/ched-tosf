@@ -54,11 +54,8 @@ export function Navbar() {
 								</NavLink>
 							</li>
 						</ul>
-						<hr className='my-3' />
-						<div
-							className='sidenav-toggler sidenav-toggler-dark d-md-none'
-							data-action='sidenav-pin'
-							data-target='#sidenav-main'>
+						<hr className='my-3 d-none' />
+						<div className='sidenav-toggler sidenav-toggler-dark d-none' data-action='sidenav-pin' data-target='#sidenav-main'>
 							<div className='sidenav-toggler-inner'>
 								<i className='sidenav-toggler-line bg-dark'></i>
 								<i className='sidenav-toggler-line bg-dark'></i>
