@@ -1,11 +1,4 @@
-import {
-	BaseEntity,
-	BeforeInsert,
-	BeforeUpdate,
-	Column,
-	Entity,
-	PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BaseEntity, BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 export abstract class Model extends BaseEntity {
 	protected hidden: Array<string> = [];

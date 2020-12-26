@@ -6,13 +6,10 @@ import { Model } from './models/Model';
 
 export namespace String {
 	export function random(length = 20) {
-		const characters =
-			'1234567890qwertyuiopasdfghjklmznxbcvQWPEORITUYLAKSJDHFGMZNXBCV';
+		const characters = '1234567890qwertyuiopasdfghjklmznxbcvQWPEORITUYLAKSJDHFGMZNXBCV';
 		let result = '';
 		for (let x = 0; x < length; x++) {
-			result += characters.charAt(
-				Math.floor(Math.random() * characters.length)
-			);
+			result += characters.charAt(Math.floor(Math.random() * characters.length));
 		}
 		return result;
 	}
@@ -32,11 +29,7 @@ export namespace String {
 }
 
 export namespace Validation {
-	export function unique<T extends Model, K extends keyof T>(
-		model: { new (): T },
-		key: K,
-		message?: string
-	) {
+	export function unique<T extends Model, K extends keyof T>(model: { new (): T }, key: K, message?: string) {
 		const Model: any = model;
 		return async (value: any) => {
 			try {
@@ -46,13 +39,7 @@ export namespace Validation {
 					},
 				});
 				if (exists) {
-					return Promise.reject(
-						message
-							? message
-							: `${String.ucfirst(
-									key as string
-							  )} is already taken.`
-					);
+					return Promise.reject(message ? message : `${String.ucfirst(key as string)} is already taken.`);
 				}
 				return true;
 			} catch (error) {
@@ -62,11 +49,7 @@ export namespace Validation {
 		};
 	}
 
-	export function exists<T extends Model, K extends keyof T>(
-		model: { new (): T },
-		key: K,
-		message?: string
-	) {
+	export function exists<T extends Model, K extends keyof T>(model: { new (): T }, key: K, message?: string) {
 		const Model: any = model;
 		return async (value: any) => {
 			try {
@@ -76,11 +59,7 @@ export namespace Validation {
 					},
 				});
 				if (!exists) {
-					return Promise.reject(
-						message
-							? message
-							: `${String.ucfirst(key as string)} does not exist.`
-					);
+					return Promise.reject(message ? message : `${String.ucfirst(key as string)} does not exist.`);
 				}
 				return true;
 			} catch (error) {

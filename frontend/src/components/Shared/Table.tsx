@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createTableColumns, parseDate } from '../../helpers';
 import pluralize from 'pluralize';
+import { useRouteMatch } from 'react-router-dom';
+import { Pagination } from './Pagination';
+import { State } from '../../state';
+import _ from 'lodash';
 
 type Props = {
 	title: string;
@@ -32,6 +36,50 @@ export function Table({
 	pagination,
 }: Props) {
 	const headColumns = columns || createTableColumns(data);
+	const match = useRouteMatch();
+
+	const state = new State(_.kebabCase(title.toLowerCase() + '-table'));
+
+	const total = data.length;
+	const page = state.has('page') ? state.get('page') : 1;
+
+	const [interval, setInterval] = useState(state.has('perPage') ? state.get<number>('perPage') : 10);
+	if (page > Math.ceil(total / interval) && state.has('page')) {
+		state.set('page', 1);
+	}
+	const [current, setCurrent] = useState(page <= Math.ceil(total / interval) ? page : 1);
+	const pageKey = state.listen<number>('page', (page) => setCurrent(page));
+	const [formInterval, setFormInterval] = useState(interval);
+	const [options, setOptions] = useState(false);
+
+	const intervalKey = state.listen<number>('perPage', (perPage) => {
+		if (current > Math.ceil(total / perPage)) {
+			state.set('page', 1);
+		}
+		setInterval(perPage);
+	});
+
+	useEffect(
+		() => () => {
+			state.unlisten('page', pageKey);
+			state.unlisten('perPage', intervalKey);
+		},
+		// eslint-disable-next-line
+		[]
+	);
+
+	const offset = (current - 1) * interval;
+
+	const paginatedData: Array<any> = [];
+
+	for (let count = offset; count < offset + interval; count++) {
+		if (typeof data[count] !== 'undefined') {
+			paginatedData.push(data[count]);
+		}
+	}
+
+	const displayData = pagination ? paginatedData : data;
+
 	return (
 		<div className='row'>
 			<div className='col'>
@@ -54,6 +102,48 @@ export function Table({
 								) : null}
 							</div>
 						</div>
+						{pagination ? (
+							<div className='mt-4'>
+								<div className='py-2'>
+									<button
+										className={`btn btn-${!options ? 'primary' : 'danger'} btn-sm`}
+										onClick={(e) => {
+											e.preventDefault();
+											setOptions(!options);
+										}}>
+										{!options ? 'Show' : 'Hide'} Options
+									</button>
+								</div>
+								{options ? (
+									<form
+										className='form-inline'
+										onSubmit={(e) => {
+											e.preventDefault();
+											state.set('perPage', formInterval >= 1 ? formInterval : 10);
+										}}>
+										<div className='form-group p-1'>
+											<label htmlFor='perPage' className='mr-2'>
+												Rows per Page:
+											</label>
+											<input
+												type='number'
+												name='perPage'
+												id='perPage'
+												placeholder='Per Page'
+												value={formInterval}
+												onChange={(e) => setFormInterval(Number(e.target.value))}
+												className='form-control form-control-sm'
+											/>
+										</div>
+										<div className='form-group p-1'>
+											<button type='submit' className='btn btn-warning btn-sm'>
+												Change
+											</button>
+										</div>
+									</form>
+								) : null}
+							</div>
+						) : null}
 					</div>
 					{processing ? (
 						<div className='card-body'>
@@ -63,7 +153,7 @@ export function Table({
 						</div>
 					) : (
 						<div>
-							{data.length > 0 ? (
+							{displayData.length > 0 ? (
 								<div className='table-responsive'>
 									<table className='table table-sm align-items-center table-flush'>
 										<thead className={`thead-${theme || 'light'}`}>
@@ -85,7 +175,7 @@ export function Table({
 											</tr>
 										</thead>
 										<tbody className='list'>
-											{data.map((item, index) => (
+											{displayData.map((item, index) => (
 												<tr key={index}>
 													{Object.entries(item).map(([key, entry], index) => (
 														<td key={index} className='text-center'>
@@ -211,37 +301,17 @@ export function Table({
 
 					{pagination ? (
 						<div className='card-footer py-4'>
-							<nav aria-label='...'>
-								<ul className='pagination justify-content-end mb-0'>
-									<li className='page-item disabled'>
-										<a className='page-link' href='/' tabIndex={-1}>
-											<i className='fas fa-angle-left'></i>
-											<span className='sr-only'>Previous</span>
-										</a>
-									</li>
-									<li className='page-item active'>
-										<a className='page-link' href='/'>
-											1
-										</a>
-									</li>
-									<li className='page-item'>
-										<a className='page-link' href='/'>
-											2 <span className='sr-only'>(current)</span>
-										</a>
-									</li>
-									<li className='page-item'>
-										<a className='page-link' href='/'>
-											3
-										</a>
-									</li>
-									<li className='page-item'>
-										<a className='page-link' href='/'>
-											<i className='fas fa-angle-right'></i>
-											<span className='sr-only'>Next</span>
-										</a>
-									</li>
-								</ul>
-							</nav>
+							{displayData.length > 0 ? (
+								<Pagination
+									url={match.path}
+									current={current}
+									total={total}
+									limit={interval}
+									onChange={(page) => {
+										state.set('page', page);
+									}}
+								/>
+							) : null}
 						</div>
 					) : null}
 				</div>

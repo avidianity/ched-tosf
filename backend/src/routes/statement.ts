@@ -27,51 +27,16 @@ router.post(
 	'/',
 	[
 		body('school').notEmpty().withMessage('is required.').bail().isString(),
-		body('schoolAddress')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('referenceNumber')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('date')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isDate()
-			.withMessage('should be a valid date.')
-			.bail()
-			.toDate(),
+		body('schoolAddress').notEmpty().withMessage('is required.').bail().isString(),
+		body('referenceNumber').notEmpty().withMessage('is required.').bail().isString(),
+		body('date').notEmpty().withMessage('is required.').bail().isDate().withMessage('should be a valid date.').bail().toDate(),
 		body('to').notEmpty().withMessage('is required.').bail().isString(),
-		body('toAddress')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
+		body('toAddress').notEmpty().withMessage('is required.').bail().isString(),
 		body('rows').isArray().bail(),
-		body('rows.*.title')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('rows.*.description')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('rows.*.code')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('rows.*.amount')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
+		body('rows.*.title').notEmpty().withMessage('is required.').bail().isString(),
+		body('rows.*.description').notEmpty().withMessage('is required.').bail().isString(),
+		body('rows.*.code').notEmpty().withMessage('is required.').bail().isString(),
+		body('rows.*.amount').notEmpty().withMessage('is required.').bail().isString(),
 	],
 	async (req: Request, res: Response) => {
 		const errors = validationResult(req);
@@ -104,36 +69,14 @@ function update() {
 			body('school').optional().bail().isString(),
 			body('schoolAddress').optional().bail().isString(),
 			body('referenceNumber').optional().bail().isString(),
-			body('date')
-				.optional()
-				.bail()
-				.isDate()
-				.withMessage('should be a valid date.')
-				.bail()
-				.toDate(),
+			body('date').optional().bail().isDate().withMessage('should be a valid date.').bail().toDate(),
 			body('to').optional().bail().isString(),
 			body('toAddress').optional().bail().isString(),
 			body('rows').optional().bail().isArray(),
-			body('rows.*.title')
-				.notEmpty()
-				.withMessage('is required.')
-				.bail()
-				.isString(),
-			body('rows.*.description')
-				.notEmpty()
-				.withMessage('is required.')
-				.bail()
-				.isString(),
-			body('rows.*.code')
-				.notEmpty()
-				.withMessage('is required.')
-				.bail()
-				.isString(),
-			body('rows.*.amount')
-				.notEmpty()
-				.withMessage('is required.')
-				.bail()
-				.isString(),
+			body('rows.*.title').notEmpty().withMessage('is required.').bail().isString(),
+			body('rows.*.description').notEmpty().withMessage('is required.').bail().isString(),
+			body('rows.*.code').notEmpty().withMessage('is required.').bail().isString(),
+			body('rows.*.amount').notEmpty().withMessage('is required.').bail().isString(),
 		],
 		async (req: Request, res: Response) => {
 			const errors = validationResult(req);

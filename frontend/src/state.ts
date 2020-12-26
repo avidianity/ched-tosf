@@ -13,7 +13,10 @@ export class State {
 	key = 'react-state-key';
 	listeners: Listeners = {};
 
-	constructor() {
+	constructor(key?: string) {
+		if (key) {
+			this.key = key;
+		}
 		const data = this.getAll();
 		this.setAll(data);
 	}

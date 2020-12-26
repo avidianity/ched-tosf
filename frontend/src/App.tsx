@@ -12,6 +12,14 @@ import state from './state';
 import { makeMask } from './helpers';
 
 Axios.defaults.baseURL = `${process.env.REACT_APP_BACKEND_URL}/api`;
+Axios.defaults.headers.common['Accept'] = 'application/json';
+Axios.interceptors.request.use((config) => {
+	if (state.has('token')) {
+		const token = state.get<string>('token');
+		config.headers['Authorization'] = `Bearer ${token}`;
+	}
+	return config;
+});
 
 export function App() {
 	const [user, setUser] = useState<User | null>(state.has('user') ? state.get<User>('user') : null);
