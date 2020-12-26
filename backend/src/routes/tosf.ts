@@ -8,33 +8,27 @@ import 'express-async-errors';
 const router = Router();
 
 router.get('/', async (_req, res) => {
-	return res.json(await TOSF.find());
+	return res.json(await TOSF.find({ relations: ['fees'] }));
+});
+
+router.get('/:id', async (req, res) => {
+	const id = req.params.id;
+	const tosf = await TOSF.findOne(id, { relations: ['fees'] });
+	if (!tosf) {
+		throw new NotFoundException('TOSF does not exist.');
+	}
+
+	return res.json(tosf);
 });
 
 router.post(
 	'/',
 	[
 		body('school').notEmpty().withMessage('is required.').bail().isString(),
-		body('address')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('preparedBy')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('certifiedBy')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('approvedBy')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
+		body('address').notEmpty().withMessage('is required.').bail().isString(),
+		body('preparedBy').notEmpty().withMessage('is required.').bail().isString(),
+		body('certifiedBy').notEmpty().withMessage('is required.').bail().isString(),
+		body('approvedBy').notEmpty().withMessage('is required.').bail().isString(),
 	],
 	async (req: Request, res: Response) => {
 		const errors = validationResult(req);
@@ -67,10 +61,14 @@ function update() {
 
 			const data = matchedData(req, { locations: ['body'] });
 			const id = req.params.id;
-			const tosf = await TOSF.findOne(id);
+			const tosf = await TOSF.findOne(id, {
+				relations: ['fees'],
+			});
+
 			if (!tosf) {
 				throw new NotFoundException('TOSF does not exist.');
 			}
+
 			return res.json(await tosf.forceFill(data).save());
 		},
 	];

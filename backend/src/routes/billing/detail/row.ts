@@ -21,58 +21,24 @@ router.get('/:id', async (req, res) => {
 router.post(
 	'/',
 	[
-		body('sequenceNumber')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('lastName')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('givenName')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('middleInitial')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
+		body('sequenceNumber').notEmpty().withMessage('is required.').bail().isString(),
+		body('lastName').notEmpty().withMessage('is required.').bail().isString(),
+		body('givenName').notEmpty().withMessage('is required.').bail().isString(),
+		body('middleInitial').notEmpty().withMessage('is required.').bail().isString(),
 		body('sex').notEmpty().withMessage('is required.').bail().isString(),
-		body('birthday')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isDate()
-			.withMessage('must be a valid date')
-			.bail()
-			.toDate(),
-		body('degreeProgram')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
+		body('birthday').notEmpty().withMessage('is required.').bail().isDate().withMessage('must be a valid date').bail().toDate(),
+		body('degreeProgram').notEmpty().withMessage('is required.').bail().isString(),
 		body('year').notEmpty().withMessage('is required.').bail().isString(),
 		body('email').notEmpty().withMessage('is required.').bail().isString(),
 		body('number').notEmpty().withMessage('is required.').bail().isString(),
 		body('fee').notEmpty().withMessage('is required.').bail().isString(),
-		body('remarks')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('detailId')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.custom(Validation.exists(BillingDetail, 'id')),
+		body('remarks').notEmpty().withMessage('is required.').bail().isString(),
+		body('detailId').notEmpty().withMessage('is required.').bail().custom(Validation.exists(BillingDetail, 'id')),
 	],
 	Validation.validate(),
 	async (req: Request, res: Response) => {
 		const data = req.body;
+		data.detail = await BillingDetail.findOneOrFail(data.detailId);
 		return res.json(await new BillingDetailRow(data).save());
 	}
 );
@@ -85,13 +51,7 @@ function update() {
 			body('givenName').optional().bail().isString(),
 			body('middleInitial').optional().bail().isString(),
 			body('sex').optional().bail().isString(),
-			body('birthday')
-				.optional()
-				.bail()
-				.isDate()
-				.withMessage('must be a valid date')
-				.bail()
-				.toDate(),
+			body('birthday').optional().bail().isDate().withMessage('must be a valid date').bail().toDate(),
 			body('degreeProgram').optional().bail().isString(),
 			body('year').optional().bail().isString(),
 			body('email').optional().bail().isString(),
@@ -105,9 +65,7 @@ function update() {
 			const id = req.params.id;
 			const row = await BillingDetailRow.findOne(id);
 			if (!row) {
-				throw new NotFoundException(
-					'Billing Detail Row does not exist.'
-				);
+				throw new NotFoundException('Billing Detail Row does not exist.');
 			}
 			return res.json(await row.forceFill(data).save());
 		},

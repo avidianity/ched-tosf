@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { BeforeRemove, Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { Degree } from './Degree';
 import { Model } from './Model';
 import { TOSF } from './TOSF';
@@ -23,7 +23,9 @@ export class Fee extends Model {
 	@Column()
 	type: FeeTypes;
 
-	@ManyToMany(() => Degree, (degree) => degree.fee, { cascade: ['remove'] })
+	@ManyToMany(() => Degree, (degree) => degree.fee, {
+		nullable: false,
+	})
 	@JoinTable()
 	degrees: Array<Degree>;
 
@@ -48,6 +50,14 @@ export class Fee extends Model {
 	@Column('text')
 	description: string;
 
-	@ManyToOne(() => TOSF, (tosf) => tosf.fees)
+	@ManyToOne(() => TOSF, (tosf) => tosf.fees, {
+		nullable: false,
+	})
 	tosf: TOSF;
+
+	@BeforeRemove()
+	async removeDegrees() {
+		this.degrees = [];
+		await this.save();
+	}
 }

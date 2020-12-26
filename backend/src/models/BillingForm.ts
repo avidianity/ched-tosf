@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { BeforeRemove, Column, Entity, OneToMany } from 'typeorm';
 import { BillingFormRow } from './BillingFormRow';
 import { Model } from './Model';
 
@@ -40,6 +40,15 @@ export class BillingForm extends Model {
 	@Column()
 	approvedBy: string;
 
-	@OneToMany(() => BillingFormRow, (row) => row.form, { cascade: ['remove'] })
+	@OneToMany(() => BillingFormRow, (row) => row.form)
 	rows: Array<BillingFormRow>;
+
+	@BeforeRemove()
+	async removeRows() {
+		await BillingFormRow.getRepository()
+			.createQueryBuilder()
+			.where('formId = :id', { id: this.id })
+			.delete()
+			.execute();
+	}
 }

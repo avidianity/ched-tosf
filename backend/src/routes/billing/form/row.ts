@@ -23,132 +23,39 @@ router.get('/:id', async (req, res) => {
 router.post(
 	'/',
 	[
-		body('sequenceNumber')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('studentNumber')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('lastName')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('givenName')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('middleInitial')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('degreeProgram')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
+		body('sequenceNumber').notEmpty().withMessage('is required.').bail().isString(),
+		body('studentNumber').notEmpty().withMessage('is required.').bail().isString(),
+		body('lastName').notEmpty().withMessage('is required.').bail().isString(),
+		body('givenName').notEmpty().withMessage('is required.').bail().isString(),
+		body('middleInitial').notEmpty().withMessage('is required.').bail().isString(),
+		body('degreeProgram').notEmpty().withMessage('is required.').bail().isString(),
 		body('year').notEmpty().withMessage('is required.').bail().isString(),
 		body('sex').notEmpty().withMessage('is required.').bail().isString(),
-		body('unitsEnrolled')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('nstpUnitsEnrolled')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('tuitionFee')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('nstpFee')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('athleticFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('computeFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('culturalFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('developmentFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('admissionFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('guidanceFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('handbookFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('laboratoryFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('libraryFee')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('medicalFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('registrationFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('schoolIDFees')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('totalTOSF')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
-		body('formId')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.custom(Validation.exists(BillingForm, 'id')),
+		body('unitsEnrolled').notEmpty().withMessage('is required.').bail().isString(),
+		body('nstpUnitsEnrolled').notEmpty().withMessage('is required.').bail().isString(),
+		body('tuitionFee').notEmpty().withMessage('is required.').bail().isString(),
+		body('nstpFee').notEmpty().withMessage('is required.').bail().isString(),
+		body('athleticFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('computeFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('culturalFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('developmentFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('admissionFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('guidanceFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('handbookFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('laboratoryFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('libraryFee').notEmpty().withMessage('is required.').bail().isString(),
+		body('medicalFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('registrationFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('schoolIDFees').notEmpty().withMessage('is required.').bail().isString(),
+		body('totalTOSF').notEmpty().withMessage('is required.').bail().isString(),
+		body('formId').notEmpty().withMessage('is required.').bail().custom(Validation.exists(BillingForm, 'id')),
 	],
 	Validation.validate(),
 	async (req: Request, res: Response) => {
 		const data = req.body;
+
+		data.form = await BillingForm.findOneOrFail(data.formId);
+
 		return res.json(await new BillingFormRow(data).save());
 	}
 );
@@ -199,16 +106,29 @@ function update() {
 router.put('/:id', ...update());
 router.patch('/:id', ...update());
 
+router.delete('/:id/billing', async (req, res) => {
+	const id = req.params.id;
+
+	const form = await BillingForm.findOne(id, { relations: ['rows'] });
+
+	if (!form) {
+		throw new NotFoundException('Billing Form does not exist.');
+	}
+
+	await Promise.all(form.rows.map((row) => row.remove()));
+	return res.sendStatus(204);
+});
+
 router.delete('/:id', async (req, res) => {
 	const id = req.params.id;
 
-	const form = await BillingFormRow.findOne(id);
+	const row = await BillingFormRow.findOne(id);
 
-	if (!form) {
+	if (!row) {
 		throw new NotFoundException('Billing Form Row does not exist.');
 	}
 
-	await form.remove();
+	await row.remove();
 	return res.sendStatus(204);
 });
 

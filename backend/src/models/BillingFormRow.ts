@@ -79,6 +79,8 @@ export class BillingFormRow extends Model {
 	@Column()
 	totalTOSF: string;
 
-	@ManyToOne(() => BillingForm, (form) => form.rows)
+	@ManyToOne(() => BillingForm, (form) => form.rows, {
+		nullable: false,
+	})
 	form: BillingForm;
 }

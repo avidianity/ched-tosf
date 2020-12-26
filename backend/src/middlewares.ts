@@ -3,6 +3,7 @@ import md5 from 'md5';
 import passport from 'passport';
 import { Strategy } from 'passport-http-bearer';
 import { HttpException } from './exceptions/HttpException';
+import { ValidationException } from './exceptions/ValidationException';
 import { Token } from './models/Token';
 
 export function errorHandler(
@@ -12,10 +13,13 @@ export function errorHandler(
 	_next: NextFunction
 ) {
 	console.error(error);
-	if (error instanceof HttpException) {
+	if (
+		error instanceof HttpException ||
+		error instanceof ValidationException
+	) {
 		return res.status(error.status).json(error);
 	}
-	return res.status(500).json(error);
+	return res.status(error.status || 500).json(error);
 }
 
 /**

@@ -10,9 +10,16 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.53",
     "@types/react-dom": "^16.9.8",
+    "axios": "^0.21.1",
+    "crypto-js": "^4.0.0",
+    "dayjs": "^1.9.7",
+    "lodash": "^4.17.20",
+    "pluralize": "^8.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "toastr": "^2.1.4",
     "typescript": "^4.0.3",
     "web-vitals": "^0.2.4"
   },
@@ -39,5 +46,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.166",
+    "@types/pluralize": "^0.0.29",
+    "@types/react-router-dom": "^5.1.6",
+    "@types/toastr": "^2.1.38"
   }
 }

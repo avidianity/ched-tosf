@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { BeforeRemove, Column, Entity, OneToMany } from 'typeorm';
 import { Model } from './Model';
 import { StatementRow } from './StatementRow';
 
@@ -25,8 +25,15 @@ export class Statement extends Model {
 	@Column()
 	toAddress: string;
 
-	@OneToMany(() => StatementRow, (row) => row.statement, {
-		cascade: ['remove'],
-	})
+	@OneToMany(() => StatementRow, (row) => row.statement)
 	rows: Array<StatementRow>;
+
+	@BeforeRemove()
+	async removeRows() {
+		await StatementRow.getRepository()
+			.createQueryBuilder()
+			.where('statementId = :id', { id: this.id })
+			.delete()
+			.execute();
+	}
 }

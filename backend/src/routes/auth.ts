@@ -18,6 +18,9 @@ router.post(
 	'/register',
 	[
 		body('email')
+			.notEmpty()
+			.withMessage('is required.')
+			.bail()
 			.isEmail()
 			.withMessage('must be a valid email.')
 			.bail()
@@ -56,7 +59,14 @@ router.post(
 
 router.post(
 	'/login',
-	[body('email').isEmail(), body('password').notEmpty().bail().isString()],
+	[
+		body('email').notEmpty().withMessage('is required.').bail().isEmail(),
+		body('password')
+			.notEmpty()
+			.withMessage('is required.')
+			.bail()
+			.isString(),
+	],
 	async (req: Request, res: Response) => {
 		const errors = validationResult(req);
 

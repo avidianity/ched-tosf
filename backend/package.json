@@ -29,6 +29,7 @@
 		"bcrypt": "^5.0.0",
 		"cookie-parser": "^1.4.5",
 		"cors": "^2.8.5",
+		"docxtemplater": "^3.19.7",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"express-async-errors": "^3.1.1",
@@ -37,6 +38,7 @@
 		"mysql": "^2.18.1",
 		"passport": "^0.4.1",
 		"passport-http-bearer": "^1.0.1",
+		"pizzip": "^3.0.6",
 		"reflect-metadata": "^0.1.13",
 		"typeorm": "^0.2.29"
 	}

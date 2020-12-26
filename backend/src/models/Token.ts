@@ -10,7 +10,9 @@ export class Token extends Model {
 	@Column()
 	lastUsed: Date;
 
-	@ManyToOne(() => User, (user) => user.tokens)
+	@ManyToOne(() => User, (user) => user.tokens, {
+		nullable: false,
+	})
 	user: User;
 
 	@BeforeInsert()

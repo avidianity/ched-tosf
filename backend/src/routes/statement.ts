@@ -16,7 +16,7 @@ router.get('/:id', async (req, res) => {
 	const id = req.params.id;
 	const statement = await Statement.findOne(id, { relations: ['rows'] });
 
-	if (statement) {
+	if (!statement) {
 		throw new NotFoundException('Statement does not exist.');
 	}
 
@@ -51,12 +51,7 @@ router.post(
 			.withMessage('is required.')
 			.bail()
 			.isString(),
-		body('rows')
-			.isArray()
-			.bail()
-			.customSanitizer((rows) =>
-				rows.map((row: any) => new StatementRow(row))
-			),
+		body('rows').isArray().bail(),
 		body('rows.*.title')
 			.notEmpty()
 			.withMessage('is required.')
@@ -87,7 +82,19 @@ router.post(
 
 		const data = matchedData(req, { locations: ['body'] });
 
-		return res.json(await new Statement(data).save());
+		const statement = await new Statement(data).save();
+
+		Promise.all(
+			data.rows.map((row: any) => {
+				const model = new StatementRow({
+					...row,
+				});
+				model.statement = statement;
+				return model.save();
+			})
+		).catch(console.log);
+
+		return res.json(statement);
 	}
 );
 
@@ -106,6 +113,27 @@ function update() {
 				.toDate(),
 			body('to').optional().bail().isString(),
 			body('toAddress').optional().bail().isString(),
+			body('rows').optional().bail().isArray(),
+			body('rows.*.title')
+				.notEmpty()
+				.withMessage('is required.')
+				.bail()
+				.isString(),
+			body('rows.*.description')
+				.notEmpty()
+				.withMessage('is required.')
+				.bail()
+				.isString(),
+			body('rows.*.code')
+				.notEmpty()
+				.withMessage('is required.')
+				.bail()
+				.isString(),
+			body('rows.*.amount')
+				.notEmpty()
+				.withMessage('is required.')
+				.bail()
+				.isString(),
 		],
 		async (req: Request, res: Response) => {
 			const errors = validationResult(req);
@@ -115,12 +143,32 @@ function update() {
 			}
 
 			const id = req.params.id;
-			const statement = await Statement.findOne(id);
+			const statement = await Statement.findOne(id, {
+				relations: ['rows'],
+			});
 			if (!statement) {
 				throw new NotFoundException('Statement does not exist.');
 			}
 
 			const data = matchedData(req, { locations: ['body'] });
+
+			if (data.rows) {
+				Promise.all(statement.rows.map((row) => row.remove()))
+					.then(() =>
+						Promise.all(
+							data.rows.map((row: any) => {
+								const model = new StatementRow({
+									...row,
+									statementId: statement.id,
+								});
+								model.statement = statement;
+								console.log(model);
+								return model.save();
+							})
+						).catch(console.log)
+					)
+					.catch(console.log);
+			}
 
 			return res.json(await statement.forceFill(data).save());
 		},

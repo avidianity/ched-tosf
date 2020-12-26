@@ -16,6 +16,8 @@ export class StatementRow extends Model {
 	@Column()
 	amount: string;
 
-	@ManyToOne(() => Statement, (statement) => statement.rows)
+	@ManyToOne(() => Statement, (statement) => statement.rows, {
+		nullable: false,
+	})
 	statement: Statement;
 }

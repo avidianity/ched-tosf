@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { BeforeRemove, Column, Entity, OneToMany } from 'typeorm';
 import { Model } from './Model';
 import { Token } from './Token';
 
@@ -12,6 +12,15 @@ export class User extends Model {
 	@Column()
 	password: string;
 
-	@OneToMany(() => Token, (token) => token.user, { cascade: ['remove'] })
+	@OneToMany(() => Token, (token) => token.user)
 	tokens: Array<Token>;
+
+	@BeforeRemove()
+	async removeTokens() {
+		await Token.getRepository()
+			.createQueryBuilder()
+			.where('userId = :id', { id: this.id })
+			.delete()
+			.execute();
+	}
 }

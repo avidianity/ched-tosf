@@ -40,6 +40,8 @@ export class BillingDetailRow extends Model {
 	@Column()
 	remarks: string;
 
-	@ManyToOne(() => BillingDetail, (detail) => detail.rows)
+	@ManyToOne(() => BillingDetail, (detail) => detail.rows, {
+		nullable: false,
+	})
 	detail: BillingDetail;
 }

@@ -7,6 +7,6 @@ export class Degree extends Model {
 	@Column({ unique: true })
 	name: string;
 
-	@ManyToMany(() => Fee, (fee) => fee.degrees)
+	@ManyToMany(() => Fee, (fee) => fee.degrees, { nullable: false })
 	fee: Fee;
 }
