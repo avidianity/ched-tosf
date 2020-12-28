@@ -10,6 +10,7 @@ import { routes } from './routes';
 import Axios from 'axios';
 import state from './state';
 import { makeMask } from './helpers';
+import { FZF } from './components/Shared/FZF';
 
 Axios.defaults.baseURL = `${process.env.REACT_APP_BACKEND_URL}/api`;
 Axios.defaults.headers.common['Accept'] = 'application/json';
@@ -54,6 +55,7 @@ export function App() {
 							token,
 							setToken: makeMask(setToken, (token: string | null) => state.set('token', token || null)),
 						}}>
+						<Route path='/' exact component={FZF} />
 						<Route path={routes.DASHBOARD} component={Dashboard} />
 						<Route path={routes.LOGIN} component={Login} />
 						<Route path={routes.REGISTER} component={Register} />

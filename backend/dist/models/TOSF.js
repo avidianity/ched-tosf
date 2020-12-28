@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,43 +8,51 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.TOSF = void 0;
-var typeorm_1 = require("typeorm");
-var Fee_1 = require("./Fee");
-var Model_1 = require("./Model");
-var TOSF = /** @class */ (function (_super) {
-    __extends(TOSF, _super);
-    function TOSF() {
-        return _super !== null && _super.apply(this, arguments) || this;
+const typeorm_1 = require("typeorm");
+const Fee_1 = require("./Fee");
+const Model_1 = require("./Model");
+let TOSF = class TOSF extends Model_1.Model {
+    async removefees() {
+        await Fee_1.Fee.getRepository()
+            .createQueryBuilder()
+            .where('tosfId = :id', { id: this.id })
+            .delete()
+            .execute();
     }
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], TOSF.prototype, "school");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], TOSF.prototype, "address");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], TOSF.prototype, "preparedBy");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], TOSF.prototype, "certifiedBy");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], TOSF.prototype, "approvedBy");
-    __decorate([
-        typeorm_1.OneToMany(function () { return Fee_1.Fee; }, function (fee) { return fee.tosf; }, { cascade: ['remove'] }),
-        __metadata("design:type", Array)
-    ], TOSF.prototype, "fees");
-    TOSF = __decorate([
-        typeorm_1.Entity()
-    ], TOSF);
-    return TOSF;
-}(Model_1.Model));
+};
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], TOSF.prototype, "school", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], TOSF.prototype, "address", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], TOSF.prototype, "preparedBy", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], TOSF.prototype, "certifiedBy", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], TOSF.prototype, "approvedBy", void 0);
+__decorate([
+    typeorm_1.OneToMany(() => Fee_1.Fee, (fee) => fee.tosf, { nullable: false }),
+    __metadata("design:type", Array)
+], TOSF.prototype, "fees", void 0);
+__decorate([
+    typeorm_1.BeforeRemove(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], TOSF.prototype, "removefees", null);
+TOSF = __decorate([
+    typeorm_1.Entity()
+], TOSF);
 exports.TOSF = TOSF;

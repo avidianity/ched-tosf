@@ -19,6 +19,7 @@ type Props = {
 	processing: boolean;
 	withAction: boolean;
 	pagination: boolean;
+	border?: boolean;
 };
 
 export function Table({
@@ -34,6 +35,7 @@ export function Table({
 	onAddClick,
 	withAction,
 	pagination,
+	border,
 }: Props) {
 	const headColumns = columns || createTableColumns(data);
 	const match = useRouteMatch();
@@ -83,7 +85,7 @@ export function Table({
 	return (
 		<div className='row'>
 			<div className='col'>
-				<div className='card'>
+				<div className={`card ${border ? 'border' : ''}`}>
 					<div className='card-header border-0'>
 						<div className='d-flex'>
 							<h3 className='mb-0 align-self-center'>{title}</h3>
@@ -301,7 +303,7 @@ export function Table({
 
 					{pagination ? (
 						<div className='card-footer py-4'>
-							{displayData.length > 0 ? (
+							{displayData.length > 0 && Math.ceil(total / interval) > 1 ? (
 								<Pagination
 									url={match.path}
 									current={current}

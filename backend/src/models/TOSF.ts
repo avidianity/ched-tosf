@@ -24,10 +24,6 @@ export class TOSF extends Model {
 
 	@BeforeRemove()
 	async removefees() {
-		await Fee.getRepository()
-			.createQueryBuilder()
-			.where('tosfId = :id', { id: this.id })
-			.delete()
-			.execute();
+		await Fee.getRepository().createQueryBuilder().where('tosfId = :id', { id: this.id }).delete().execute();
 	}
 }

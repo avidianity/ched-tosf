@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,52 +8,58 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Statement = void 0;
-var typeorm_1 = require("typeorm");
-var Model_1 = require("./Model");
-var StatementRow_1 = require("./StatementRow");
+const typeorm_1 = require("typeorm");
+const Model_1 = require("./Model");
+const StatementRow_1 = require("./StatementRow");
 /**
  * Form 1 of TOSF
  */
-var Statement = /** @class */ (function (_super) {
-    __extends(Statement, _super);
-    function Statement() {
-        return _super !== null && _super.apply(this, arguments) || this;
+let Statement = class Statement extends Model_1.Model {
+    async removeRows() {
+        await StatementRow_1.StatementRow.getRepository()
+            .createQueryBuilder()
+            .where('statementId = :id', { id: this.id })
+            .delete()
+            .execute();
     }
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Statement.prototype, "school");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Statement.prototype, "schoolAddress");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Statement.prototype, "referenceNumber");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Statement.prototype, "date");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Statement.prototype, "to");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Statement.prototype, "toAddress");
-    __decorate([
-        typeorm_1.OneToMany(function () { return StatementRow_1.StatementRow; }, function (row) { return row.statement; }, {
-            cascade: ['remove']
-        }),
-        __metadata("design:type", Array)
-    ], Statement.prototype, "rows");
-    Statement = __decorate([
-        typeorm_1.Entity()
-    ], Statement);
-    return Statement;
-}(Model_1.Model));
+};
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "school", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "schoolAddress", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "referenceNumber", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "date", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "to", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "toAddress", void 0);
+__decorate([
+    typeorm_1.OneToMany(() => StatementRow_1.StatementRow, (row) => row.statement),
+    __metadata("design:type", Array)
+], Statement.prototype, "rows", void 0);
+__decorate([
+    typeorm_1.BeforeRemove(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], Statement.prototype, "removeRows", null);
+Statement = __decorate([
+    typeorm_1.Entity()
+], Statement);
 exports.Statement = Statement;

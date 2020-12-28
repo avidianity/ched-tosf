@@ -22,6 +22,8 @@ export interface Fee extends Model {
 	year: string;
 	costPerUnit: string;
 	coverage: string;
+	name: string;
+	amount: string;
 	frequencyPerAY: string;
 	referenceNumber: string;
 	dateOfApproval: Date;

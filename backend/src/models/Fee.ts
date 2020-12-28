@@ -30,6 +30,12 @@ export class Fee extends Model {
 	degrees: Array<Degree>;
 
 	@Column()
+	name: string;
+
+	@Column()
+	amount: string;
+
+	@Column()
 	year: string;
 
 	@Column()

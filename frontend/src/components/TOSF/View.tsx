@@ -6,6 +6,8 @@ import { Fee, TOSF } from '../../contracts';
 import { exceptMany, handleError } from '../../helpers';
 import { Table } from '../Shared/Table';
 import toastr from 'toastr';
+import { groupBy } from 'lodash';
+import FileDownload from 'js-file-download';
 
 export function View() {
 	const match = useRouteMatch<{ id: string }>();
@@ -54,6 +56,15 @@ export function View() {
 
 	const func: any = () => {};
 
+	const exportAsFile = async (id: number) => {
+		try {
+			const response = await axios.get(`/tosfs/${id}/export`, { responseType: 'blob' });
+			FileDownload(response.data, response.headers['x-file-name'], response.headers['Content-Type']);
+		} catch (error) {
+			handleError(error);
+		}
+	};
+
 	return (
 		<div className='row'>
 			{tosf !== null ? (
@@ -63,8 +74,13 @@ export function View() {
 							<div className='d-flex'>
 								<h3 className='card-title align-self-center'>{tosf.school}</h3>
 								<div className='d-flex ml-auto align-self-center'>
-									<button className='btn btn-info btn-sm'>
-										<i className='fas fa-file-pdf'></i> Export as PDF
+									<button
+										className='btn btn-info btn-sm'
+										onClick={(e) => {
+											e.preventDefault();
+											exportAsFile(tosf.id);
+										}}>
+										<i className='fas fa-file-word'></i> Export as DOCX
 									</button>
 									<Link className='btn btn-warning btn-sm' to={`${window.location.pathname}/edit`}>
 										{' '}
@@ -119,22 +135,27 @@ export function View() {
 							<p className='card-text'>{tosf.address}</p>
 						</div>
 						<div className='card-body py-3'>
-							<Table
-								data={exceptMany(tosf.fees, ['id', 'createdAt', 'updatedAt', 'tosf']).map((tosf) => ({
-									...tosf,
-									degrees: tosf.degrees.map((degree) => degree.name).join(', '),
-									dateOfApproval: dayjs(tosf.dateOfApproval).format('MMMM DD, YYYY'),
-								}))}
-								title='Fees'
-								withAction={false}
-								onAddClick={func}
-								onRefreshClick={func}
-								onEditClick={func}
-								onViewClick={func}
-								processing={false}
-								pagination={false}
-								onDeleteConfirm={func}
-							/>
+							<h3 className='card-title'>Fees</h3>
+							<hr />
+							{Object.entries(groupBy(tosf.fees, 'type')).map(([title, fees]) => (
+								<Table
+									border={true}
+									data={exceptMany(fees, ['id', 'createdAt', 'updatedAt', 'tosf', 'type']).map((tosf) => ({
+										...tosf,
+										degrees: tosf.degrees.map((degree) => degree.name).join(', '),
+										dateOfApproval: dayjs(tosf.dateOfApproval).format('MMMM DD, YYYY'),
+									}))}
+									title={title}
+									withAction={false}
+									onAddClick={func}
+									onRefreshClick={func}
+									onEditClick={func}
+									onViewClick={func}
+									processing={false}
+									pagination={false}
+									onDeleteConfirm={func}
+								/>
+							))}
 						</div>
 						<div className='card-footer pb-5'>
 							<p className='card-text'>

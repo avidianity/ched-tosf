@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,61 +8,70 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Fee = void 0;
-var typeorm_1 = require("typeorm");
-var Degree_1 = require("./Degree");
-var Model_1 = require("./Model");
-var TOSF_1 = require("./TOSF");
-var Fee = /** @class */ (function (_super) {
-    __extends(Fee, _super);
-    function Fee() {
-        return _super !== null && _super.apply(this, arguments) || this;
+const typeorm_1 = require("typeorm");
+const Degree_1 = require("./Degree");
+const Model_1 = require("./Model");
+const TOSF_1 = require("./TOSF");
+let Fee = class Fee extends Model_1.Model {
+    async removeDegrees() {
+        this.degrees = [];
+        await this.save();
     }
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Fee.prototype, "type");
-    __decorate([
-        typeorm_1.ManyToMany(function () { return Degree_1.Degree; }, function (degree) { return degree.fee; }, { cascade: ['remove'] }),
-        typeorm_1.JoinTable(),
-        __metadata("design:type", Array)
-    ], Fee.prototype, "degrees");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Fee.prototype, "year");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Fee.prototype, "costPerUnit");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Fee.prototype, "coverage");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Fee.prototype, "frequencyPerAY");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], Fee.prototype, "referenceNumber");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", Date)
-    ], Fee.prototype, "dateOfApproval");
-    __decorate([
-        typeorm_1.Column('text'),
-        __metadata("design:type", String)
-    ], Fee.prototype, "description");
-    __decorate([
-        typeorm_1.ManyToOne(function () { return TOSF_1.TOSF; }, function (tosf) { return tosf.fees; }),
-        __metadata("design:type", TOSF_1.TOSF)
-    ], Fee.prototype, "tosf");
-    Fee = __decorate([
-        typeorm_1.Entity()
-    ], Fee);
-    return Fee;
-}(Model_1.Model));
+};
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Fee.prototype, "type", void 0);
+__decorate([
+    typeorm_1.ManyToMany(() => Degree_1.Degree, (degree) => degree.fee, {
+        nullable: false,
+    }),
+    typeorm_1.JoinTable(),
+    __metadata("design:type", Array)
+], Fee.prototype, "degrees", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Fee.prototype, "year", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Fee.prototype, "costPerUnit", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Fee.prototype, "coverage", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Fee.prototype, "frequencyPerAY", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Fee.prototype, "referenceNumber", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Date)
+], Fee.prototype, "dateOfApproval", void 0);
+__decorate([
+    typeorm_1.Column('text'),
+    __metadata("design:type", String)
+], Fee.prototype, "description", void 0);
+__decorate([
+    typeorm_1.ManyToOne(() => TOSF_1.TOSF, (tosf) => tosf.fees, {
+        nullable: false,
+    }),
+    __metadata("design:type", TOSF_1.TOSF)
+], Fee.prototype, "tosf", void 0);
+__decorate([
+    typeorm_1.BeforeRemove(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], Fee.prototype, "removeDegrees", null);
+Fee = __decorate([
+    typeorm_1.Entity()
+], Fee);
 exports.Fee = Fee;

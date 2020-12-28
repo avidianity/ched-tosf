@@ -1,17 +1,4 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -21,70 +8,78 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.BillingForm = void 0;
-var typeorm_1 = require("typeorm");
-var BillingFormRow_1 = require("./BillingFormRow");
-var Model_1 = require("./Model");
+const typeorm_1 = require("typeorm");
+const BillingFormRow_1 = require("./BillingFormRow");
+const Model_1 = require("./Model");
 /**
  * Form 2 of TOSF
  */
-var BillingForm = /** @class */ (function (_super) {
-    __extends(BillingForm, _super);
-    function BillingForm() {
-        return _super !== null && _super.apply(this, arguments) || this;
+let BillingForm = class BillingForm extends Model_1.Model {
+    async removeRows() {
+        await BillingFormRow_1.BillingFormRow.getRepository()
+            .createQueryBuilder()
+            .where('formId = :id', { id: this.id })
+            .delete()
+            .execute();
     }
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "school");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "schoolAddress");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "referenceNumber");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "date");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "pageTotal");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "pageAccumulatedTotal");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "total");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "preparedBy");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "certifiedBy");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "certifiedBySecond");
-    __decorate([
-        typeorm_1.Column(),
-        __metadata("design:type", String)
-    ], BillingForm.prototype, "approvedBy");
-    __decorate([
-        typeorm_1.OneToMany(function () { return BillingFormRow_1.BillingFormRow; }, function (row) { return row.form; }, { cascade: ['remove'] }),
-        __metadata("design:type", Array)
-    ], BillingForm.prototype, "rows");
-    BillingForm = __decorate([
-        typeorm_1.Entity()
-    ], BillingForm);
-    return BillingForm;
-}(Model_1.Model));
+};
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "school", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "schoolAddress", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "referenceNumber", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "date", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "pageTotal", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "pageAccumulatedTotal", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "total", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "preparedBy", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "certifiedBy", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "certifiedBySecond", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingForm.prototype, "approvedBy", void 0);
+__decorate([
+    typeorm_1.OneToMany(() => BillingFormRow_1.BillingFormRow, (row) => row.form),
+    __metadata("design:type", Array)
+], BillingForm.prototype, "rows", void 0);
+__decorate([
+    typeorm_1.BeforeRemove(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], BillingForm.prototype, "removeRows", null);
+BillingForm = __decorate([
+    typeorm_1.Entity()
+], BillingForm);
 exports.BillingForm = BillingForm;

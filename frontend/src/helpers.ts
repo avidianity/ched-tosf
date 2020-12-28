@@ -27,7 +27,8 @@ export function handleError(error: any) {
 			response.data.errors
 				.map(({ param, msg }: any) => {
 					const array = msg.split(' ');
-					if (array[0].trim() !== param.trim()) {
+
+					if (array[0].trim().toLowerCase() !== param.trim().toLowerCase() && msg.includes('required')) {
 						return `${ucfirst(sentencify(param))} ${msg}`;
 					}
 					return msg;
@@ -39,6 +40,19 @@ export function handleError(error: any) {
 	} else if (error.message) {
 		toastr.error(error.message);
 	}
+}
+
+export function groupBy<T, K extends keyof T>(data: Array<T>, key: K) {
+	const temp: { [key: string]: Array<T> } = {};
+
+	data.forEach((item) => {
+		const property: any = item[key];
+		if (!(property in temp)) {
+			temp[property] = [];
+		}
+		temp[property].push(item);
+	});
+	return Object.keys(temp).map((key) => temp[key]);
 }
 
 export function createTableColumns(data: Array<any>) {
@@ -76,14 +90,15 @@ export function makeMask<T extends Function>(callable: T, callback: Function) {
 }
 
 export function except<T, K extends keyof T>(data: T, keys: Array<K>) {
+	const copy = { ...data };
 	for (const key of keys) {
-		if (key in data) {
-			delete data[key];
+		if (key in copy) {
+			delete copy[key];
 		}
 	}
-	return data;
+	return copy;
 }
 
 export function exceptMany<T, K extends keyof T>(data: Array<T>, keys: Array<K>) {
-	return data.map((item) => except(item, keys));
+	return [...data].map((item) => except(item, keys));
 }

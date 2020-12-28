@@ -40,6 +40,7 @@ export function Form() {
 	};
 
 	const submit = async () => {
+		if (processing) return;
 		setProcessing(true);
 		try {
 			const payload = {

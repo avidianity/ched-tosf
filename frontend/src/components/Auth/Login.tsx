@@ -45,16 +45,8 @@ export function Login() {
 			<div className='main-content'>
 				<div className='header bg-gradient-primary py-6 py-lg-7 pt-lg-8'>
 					<div className='separator separator-bottom separator-skew zindex-100'>
-						<svg
-							x='0'
-							y='0'
-							viewBox='0 0 2560 100'
-							preserveAspectRatio='none'
-							version='1.1'
-							xmlns='http://www.w3.org/2000/svg'>
-							<polygon
-								className='fill-default'
-								points='2560 0 2560 100 0 100'></polygon>
+						<svg x='0' y='0' viewBox='0 0 2560 100' preserveAspectRatio='none' version='1.1' xmlns='http://www.w3.org/2000/svg'>
+							<polygon className='fill-default' points='2560 0 2560 100 0 100'></polygon>
 						</svg>
 					</div>
 				</div>
@@ -70,26 +62,17 @@ export function Login() {
 										<a
 											href='/'
 											onClick={(e) => e.preventDefault()}
-											className={`btn btn-neutral btn-icon ${
-												processing ? 'disabled' : ''
-											}`}>
+											className={`btn btn-neutral btn-icon ${processing ? 'disabled' : ''}`}>
 											<span className='btn-inner--icon'>
-												<img
-													src='/assets/img/icons/common/google.svg'
-													alt=''
-												/>
+												<img src='/assets/img/icons/common/google.svg' alt='' />
 											</span>
-											<span className='btn-inner--text'>
-												Google
-											</span>
+											<span className='btn-inner--text'>Google</span>
 										</a>
 									</div>
 								</div>
 								<div className='card-body px-lg-5 py-lg-5'>
 									<div className='text-center text-muted mb-4'>
-										<small>
-											Or sign in with credentials
-										</small>
+										<small>Or sign in with credentials</small>
 									</div>
 									<form
 										onSubmit={(e) => {
@@ -104,18 +87,13 @@ export function Login() {
 													</span>
 												</div>
 												<input
-													className={`form-control ${
-														processing
-															? 'disabled'
-															: ''
-													}`}
+													className={`form-control ${processing ? 'disabled' : ''}`}
 													disabled={processing}
 													placeholder='Email'
+													autoComplete='email'
 													type='email'
 													value={email}
-													onChange={(e) =>
-														setEmail(e.target.value)
-													}
+													onChange={(e) => setEmail(e.target.value)}
 												/>
 											</div>
 										</div>
@@ -127,34 +105,24 @@ export function Login() {
 													</span>
 												</div>
 												<input
-													className={`form-control ${
-														processing
-															? 'disabled'
-															: ''
-													}`}
+													className={`form-control ${processing ? 'disabled' : ''}`}
 													disabled={processing}
 													placeholder='Password'
 													type='password'
+													autoComplete='current-password'
 													value={password}
-													onChange={(e) =>
-														setPassword(
-															e.target.value
-														)
-													}
+													onChange={(e) => setPassword(e.target.value)}
 												/>
 											</div>
 										</div>
 										<div className='text-center'>
 											<button
 												type='submit'
-												className={`btn btn-primary my-4 ${
-													processing ? 'disabled' : ''
-												}`}
+												className={`btn btn-primary my-4 ${processing ? 'disabled' : ''}`}
 												disabled={processing}>
 												{processing ? (
 													<div className='flex'>
-														Signing in...{' '}
-														<i className='fas fa-circle-notch fa-spin'></i>
+														Signing in... <i className='fas fa-circle-notch fa-spin'></i>
 													</div>
 												) : (
 													'Sign In'
@@ -166,20 +134,12 @@ export function Login() {
 							</div>
 							<div className='row mt-3'>
 								<div className='col-6'>
-									<a
-										href='/forgot-password'
-										className={`text-light ${
-											processing ? 'disabled' : ''
-										}`}>
+									<a href='/forgot-password' className={`text-light ${processing ? 'disabled' : ''}`}>
 										<small>Forgot password?</small>
 									</a>
 								</div>
 								<div className='col-6 text-right'>
-									<Link
-										to={routes.REGISTER}
-										className={`text-light ${
-											processing ? 'disabled' : ''
-										}`}>
+									<Link to={routes.REGISTER} className={`text-light ${processing ? 'disabled' : ''}`}>
 										<small>Register</small>
 									</Link>
 								</div>

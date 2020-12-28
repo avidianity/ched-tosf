@@ -20,6 +20,7 @@ export function Form() {
 	const history = useHistory();
 
 	const submit = async () => {
+		if (processing) return;
 		setProcessing(true);
 		try {
 			const payload = {
