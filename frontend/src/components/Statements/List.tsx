@@ -5,6 +5,7 @@ import { Table } from '../Shared/Table';
 import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { exceptMany } from '../../helpers';
+import dayjs from 'dayjs';
 
 export function List() {
 	const [statements, setStatements] = useState<Array<Statement>>([]);
@@ -47,7 +48,12 @@ export function List() {
 	return (
 		<Table
 			title='Statements'
-			data={exceptMany(statements, ['rows'])}
+			data={exceptMany(statements, ['rows']).map((statement) => ({
+				...statement,
+				date: dayjs(statement.dateOne).format('MMMM DD, YYYY'),
+				dateOne: dayjs(statement.dateOne).format('MMMM DD, YYYY'),
+				dateTwo: dayjs(statement.dateTwo).format('MMMM DD, YYYY'),
+			}))}
 			processing={processing}
 			onAddClick={() => history.push(path('add'))}
 			onViewClick={(index) => {

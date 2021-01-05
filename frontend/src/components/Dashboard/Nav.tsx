@@ -327,18 +327,18 @@ export function Nav(props: Props) {
 						</div>
 					</a>
 					<div className='dropdown-menu  dropdown-menu-right '>
-						<div className='dropdown-header noti-title'>
+						{/* <div className='dropdown-header noti-title'>
 							<h6 className='text-overflow m-0'>Welcome!</h6>
-						</div>
-						<a href='/' className='dropdown-item'>
+						</div> */}
+						{/* <a href='/' className='dropdown-item'>
 							<i className='ni ni-single-02'></i>
 							<span>Profile</span>
-						</a>
-						<a href='/' className='dropdown-item'>
+						</a> */}
+						{/* <a href='/' className='dropdown-item'>
 							<i className='ni ni-settings-gear-65'></i>
 							<span>Settings</span>
-						</a>
-						<div className='dropdown-divider'></div>
+						</a> */}
+						{/* <div className='dropdown-divider'></div> */}
 						<a
 							href='/logout'
 							className='dropdown-item'

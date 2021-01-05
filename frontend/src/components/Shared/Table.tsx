@@ -157,7 +157,7 @@ export function Table({
 						<div>
 							{displayData.length > 0 ? (
 								<div className='table-responsive'>
-									<table className='table table-sm align-items-center table-flush'>
+									<table className={`table table-sm align-items-center table-flush`}>
 										<thead className={`thead-${theme || 'light'}`}>
 											<tr>
 												{headColumns.map((column, index) => (
@@ -220,7 +220,7 @@ export function Table({
 												</tr>
 											))}
 										</tbody>
-										{data.length >= 10 ? (
+										{displayData.length >= 10 ? (
 											<tfoot className={`thead-${theme || 'light'}`}>
 												<tr>
 													{headColumns.map((column, index) => (

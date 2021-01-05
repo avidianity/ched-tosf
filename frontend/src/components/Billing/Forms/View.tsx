@@ -6,6 +6,7 @@ import { BillingForm } from '../../../contracts';
 import { exceptMany, handleError } from '../../../helpers';
 import { Table } from '../../Shared/Table';
 import toastr from 'toastr';
+import FileDownload from 'js-file-download';
 
 export function View() {
 	const match = useRouteMatch<{ id: string }>();
@@ -19,6 +20,15 @@ export function View() {
 		} catch (error) {
 			handleError(error);
 			history.goBack();
+		}
+	};
+
+	const exportAsFile = async (id: number) => {
+		try {
+			const response = await axios.get<Blob>(`/billing/forms/${id}/export`, { responseType: 'blob' });
+			FileDownload(response.data, response.headers['x-file-name'], response.headers['Content-Type']);
+		} catch (error) {
+			handleError(error);
 		}
 	};
 
@@ -49,8 +59,13 @@ export function View() {
 							<div className='d-flex'>
 								<h3 className='card-title align-self-center'>{billingForm.school}</h3>
 								<div className='d-flex ml-auto align-self-center'>
-									<button className='btn btn-info btn-sm'>
-										<i className='fas fa-file-pdf'></i> Export as PDF
+									<button
+										className='btn btn-info btn-sm'
+										onClick={(e) => {
+											e.preventDefault();
+											exportAsFile(billingForm.id);
+										}}>
+										<i className='fas fa-file-word'></i> Export as DOCX
 									</button>
 									<Link className='btn btn-warning btn-sm' to={`${window.location.pathname}/edit`}>
 										{' '}
@@ -120,6 +135,7 @@ export function View() {
 								processing={false}
 								pagination={false}
 								onDeleteConfirm={func}
+								border={true}
 							/>
 						</div>
 						<div className='card-footer pb-5'>

@@ -1,5 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { BeforeRemove, Column, Entity } from 'typeorm';
 import { Model } from './Model';
+import fs from 'fs';
+
 @Entity()
 export class File extends Model {
 	protected hidden = ['path'];
@@ -18,4 +20,19 @@ export class File extends Model {
 
 	@Column()
 	path: string;
+
+	toJSON() {
+		const data = super.toJSON();
+
+		data.available = fs.existsSync(this.path);
+
+		return data;
+	}
+
+	@BeforeRemove()
+	removeFile() {
+		if (fs.existsSync(this.path)) {
+			fs.unlinkSync(this.path);
+		}
+	}
 }

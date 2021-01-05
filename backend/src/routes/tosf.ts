@@ -12,7 +12,7 @@ import fs from 'fs';
 const router = Router();
 
 router.get('/', async (_req, res) => {
-	return res.json(await TOSF.find({ relations: ['fees'] }));
+	return res.json(await TOSF.find({ relations: ['fees'], order: { updatedAt: 'DESC' } }));
 });
 
 router.get('/:id', async (req, res) => {
@@ -33,7 +33,6 @@ router.get('/:id/export', async (req, res) => {
 	}
 
 	tosf.fees = await Promise.all(tosf.fees.map(async (fee) => await Fee.findOneOrFail(fee.id, { relations: ['degrees'] })));
-	console.log(req.app.get('templatesPath'));
 	const file = await exportAsFile(
 		req.app.get('templatesPath'),
 		'template-tosf.docx',

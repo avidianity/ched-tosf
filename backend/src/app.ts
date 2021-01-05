@@ -1,7 +1,20 @@
 import express, { json, urlencoded } from 'express';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { tosf, auth, statement, fee, statementRow, degree, billingForm, billingFormRow, billingDetail, billingDetailRow } from './routes';
+import {
+	tosf,
+	auth,
+	statement,
+	fee,
+	statementRow,
+	degree,
+	billingForm,
+	billingFormRow,
+	billingDetail,
+	billingDetailRow,
+	file,
+	count,
+} from './routes';
 import { auth as a, errorHandler } from './middlewares';
 import './shims';
 import 'express-async-errors';
@@ -37,6 +50,10 @@ app.use('/api/billing/forms/row', ...a(billingFormRow));
 
 app.use('/api/billing/details', ...a(billingDetail));
 app.use('/api/billing/details/row', ...a(billingDetailRow));
+
+app.use('/api/files', ...a(file));
+
+app.use('/api/counts', ...a(count));
 
 app.use((_req, res) => {
 	return res.status(404).end();

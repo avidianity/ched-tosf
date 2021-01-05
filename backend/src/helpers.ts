@@ -133,7 +133,7 @@ export async function exportAsFile(folderPath: string, fileName: string, data: a
 		doc.setData(data);
 		doc.render();
 		const buffer = doc.getZip().generate({ type: 'nodebuffer' });
-		const saveName = `${type}-${dayjs(new Date()).format('MMMM-DD-YYYY').toLowerCase()}-${String.random(10)}.docx`;
+		const saveName = `${type}-${dayjs(new Date()).format('MMMM-DD-YYYY')}-${String.random(10)}.docx`;
 		const realPath = path.resolve(folderPath, `${saveName}`);
 		fs.writeFileSync(realPath, buffer);
 		const file = new File();

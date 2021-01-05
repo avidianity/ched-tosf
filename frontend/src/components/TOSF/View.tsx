@@ -58,7 +58,7 @@ export function View() {
 
 	const exportAsFile = async (id: number) => {
 		try {
-			const response = await axios.get(`/tosfs/${id}/export`, { responseType: 'blob' });
+			const response = await axios.get<Blob>(`/tosfs/${id}/export`, { responseType: 'blob' });
 			FileDownload(response.data, response.headers['x-file-name'], response.headers['Content-Type']);
 		} catch (error) {
 			handleError(error);
@@ -139,7 +139,6 @@ export function View() {
 							<hr />
 							{Object.entries(groupBy(tosf.fees, 'type')).map(([title, fees]) => (
 								<Table
-									border={true}
 									data={exceptMany(fees, ['id', 'createdAt', 'updatedAt', 'tosf', 'type']).map((tosf) => ({
 										...tosf,
 										degrees: tosf.degrees.map((degree) => degree.name).join(', '),
@@ -154,6 +153,7 @@ export function View() {
 									processing={false}
 									pagination={false}
 									onDeleteConfirm={func}
+									border={true}
 								/>
 							))}
 						</div>

@@ -12,7 +12,7 @@ const router = Router();
 
 router.get('/:id', async (req: Request, res: Response) => {
 	const id = req.params.id;
-	const fee = await Fee.findOne(id, { relations: ['degrees'] });
+	const fee = await Fee.findOne(id, { relations: ['degrees'], order: { updatedAt: 'DESC' } });
 
 	if (!fee) {
 		throw new NotFoundException('Fee does not exist.');

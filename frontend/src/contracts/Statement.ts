@@ -11,5 +11,11 @@ export interface Statement extends Model {
 	date: string;
 	to: string;
 	toAddress: string;
+	nameOne: string;
+	positionOne: string;
+	dateOne: string;
+	nameTwo: string;
+	positionTwo: string;
+	dateTwo: string;
 	rows: Array<StatementRow>;
 }

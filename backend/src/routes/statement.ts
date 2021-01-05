@@ -5,11 +5,14 @@ import { ValidationException } from '../exceptions/ValidationException';
 import { Statement } from '../models/Statement';
 import { StatementRow } from '../models/StatementRow';
 import 'express-async-errors';
+import fs from 'fs';
+import { exportAsFile } from '../helpers';
+import dayjs from 'dayjs';
 
 const router = Router();
 
 router.get('/', async (_req, res) => {
-	return res.json(await Statement.find({ relations: ['rows'] }));
+	return res.json(await Statement.find({ relations: ['rows'], order: { updatedAt: 'DESC' } }));
 });
 
 router.get('/:id', async (req, res) => {
@@ -23,6 +26,34 @@ router.get('/:id', async (req, res) => {
 	return res.json(statement);
 });
 
+router.get('/:id/export', async (req, res) => {
+	const id = req.params.id;
+	const statement = await Statement.findOne(id, { relations: ['rows'] });
+	if (!statement) {
+		throw new NotFoundException('Statement does not exist.');
+	}
+
+	const file = await exportAsFile(
+		req.app.get('templatesPath'),
+		'template-statement.docx',
+		{
+			...statement,
+			date: dayjs(statement.date).format('MMMM DD, YYYY'),
+			dateOne: dayjs(statement.dateOne).format('MMMM DD, YYYY'),
+			dateTwo: dayjs(statement.dateTwo).format('MMMM DD, YYYY'),
+		},
+		'Statement'
+	);
+	if (!file) {
+		return res.status(500).json({ message: 'Sorry, unable to export at the moment. Please try again later.' });
+	}
+	const binary = fs.readFileSync(file.path);
+	res.setHeader('Content-Type', file.mimeType);
+	res.setHeader('Content-Length', file.size);
+	res.setHeader('X-File-Name', file.name);
+	return res.send(binary);
+});
+
 router.post(
 	'/',
 	[
@@ -32,6 +63,12 @@ router.post(
 		body('date').notEmpty().withMessage('is required.').bail().isDate().withMessage('should be a valid date.').bail().toDate(),
 		body('to').notEmpty().withMessage('is required.').bail().isString(),
 		body('toAddress').notEmpty().withMessage('is required.').bail().isString(),
+		body('nameOne').notEmpty().withMessage('is required.').bail().isString(),
+		body('positionOne').notEmpty().withMessage('is required.').bail().isString(),
+		body('dateOne').notEmpty().withMessage('is required.').bail().isDate().withMessage('should be a valid date.').bail().toDate(),
+		body('nameTwo').notEmpty().withMessage('is required.').bail().isString(),
+		body('positionTwo').notEmpty().withMessage('is required.').bail().isString(),
+		body('dateTwo').notEmpty().withMessage('is required.').bail().isDate().withMessage('should be a valid date.').bail().toDate(),
 		body('rows').isArray().bail(),
 		body('rows.*.title').notEmpty().withMessage('is required.').bail().isString(),
 		body('rows.*.description').notEmpty().withMessage('is required.').bail().isString(),
@@ -72,6 +109,12 @@ function update() {
 			body('date').optional().bail().isDate().withMessage('should be a valid date.').bail().toDate(),
 			body('to').optional().bail().isString(),
 			body('toAddress').optional().bail().isString(),
+			body('nameOne').optional().bail().isString(),
+			body('positionOne').optional().bail().isString(),
+			body('dateOne').optional().bail().isDate().withMessage('should be a valid date.').bail().toDate(),
+			body('nameTwo').optional().bail().isString(),
+			body('positionTwo').optional().bail().isString(),
+			body('dateTwo').optional().bail().isDate().withMessage('should be a valid date.').bail().toDate(),
 			body('rows').optional().bail().isArray(),
 			body('rows.*.title').notEmpty().withMessage('is required.').bail().isString(),
 			body('rows.*.description').notEmpty().withMessage('is required.').bail().isString(),
@@ -105,7 +148,6 @@ function update() {
 									statementId: statement.id,
 								});
 								model.statement = statement;
-								console.log(model);
 								return model.save();
 							})
 						).catch(console.log)

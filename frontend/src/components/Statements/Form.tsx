@@ -14,6 +14,12 @@ export function Form() {
 	const [schoolAddress, setSchoolAddress] = useState('');
 	const [referenceNumber, setReferenceNumber] = useState('');
 	const [date, setDate] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+	const [nameOne, setNameOne] = useState('');
+	const [positionOne, setPositionOne] = useState('');
+	const [dateOne, setDateOne] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
+	const [nameTwo, setNameTwo] = useState('');
+	const [positionTwo, setPositionTwo] = useState('');
+	const [dateTwo, setDateTwo] = useState(dayjs(new Date()).format('YYYY-MM-DD'));
 	const [to, setTo] = useState('');
 	const [toAddress, setToAddress] = useState('');
 	const [rows, setRows] = useState<Array<Partial<StatementRow>>>([]);
@@ -27,6 +33,12 @@ export function Form() {
 				school,
 				schoolAddress,
 				referenceNumber,
+				nameOne,
+				positionOne,
+				dateOne,
+				nameTwo,
+				positionTwo,
+				dateTwo,
 				date,
 				to,
 				toAddress,
@@ -45,13 +57,34 @@ export function Form() {
 		setMode('Edit');
 		try {
 			const {
-				data: { school, schoolAddress, referenceNumber, date, to, toAddress, rows, id },
+				data: {
+					school,
+					schoolAddress,
+					referenceNumber,
+					date,
+					to,
+					toAddress,
+					rows,
+					id,
+					nameOne,
+					positionOne,
+					dateOne,
+					nameTwo,
+					positionTwo,
+					dateTwo,
+				},
 			} = await axios.get<Statement>(`/statements/${statementID}`);
 			setID(id);
 			setSchool(school);
 			setSchoolAddress(schoolAddress);
-			setReferenceNumber(referenceNumber);
 			setDate(dayjs(date).format('YYYY-MM-DD'));
+			setReferenceNumber(referenceNumber);
+			setNameOne(nameOne);
+			setPositionOne(positionOne);
+			setDateOne(dayjs(dateOne).format('YYYY-MM-DD'));
+			setNameTwo(nameOne);
+			setPositionTwo(positionOne);
+			setDateTwo(dayjs(dateOne).format('YYYY-MM-DD'));
 			setTo(to);
 			setToAddress(toAddress);
 			setRows([...exceptMany(rows, ['createdAt', 'updatedAt'])]);
@@ -85,7 +118,7 @@ export function Form() {
 						submit();
 					}}>
 					<div className='form-row'>
-						<div className='col-12 col-md-6 col-lg-4 p-2'>
+						<div className='col-12 col-md-4 col-lg-3 p-2'>
 							<label htmlFor='school'>School:</label>
 							<input
 								type='text'
@@ -98,7 +131,7 @@ export function Form() {
 								onChange={(e) => setSchool(e.target.value)}
 							/>
 						</div>
-						<div className='col-12 col-md-6 col-lg-4 p-2'>
+						<div className='col-12 col-md-4 col-lg-3 p-2'>
 							<label htmlFor='school_address'>School Address:</label>
 							<input
 								type='text'
@@ -111,7 +144,7 @@ export function Form() {
 								onChange={(e) => setSchoolAddress(e.target.value)}
 							/>
 						</div>
-						<div className='col-12 col-md-6 col-lg-4 p-2'>
+						<div className='col-12 col-md-4 col-lg-3 p-2'>
 							<label htmlFor='reference_number'>Reference Number:</label>
 							<input
 								type='text'
@@ -124,7 +157,7 @@ export function Form() {
 								onChange={(e) => setReferenceNumber(e.target.value)}
 							/>
 						</div>
-						<div className='col-12 col-md-6 col-lg-4 p-2'>
+						<div className='col-12 col-md-4 col-lg-3 p-2'>
 							<label htmlFor='date'>Date:</label>
 							<input
 								type='date'
@@ -137,7 +170,7 @@ export function Form() {
 								onChange={(e) => setDate(e.target.value)}
 							/>
 						</div>
-						<div className='col-12 col-md-6 col-lg-4 p-2'>
+						<div className='col-12 col-md-4 col-lg-3 p-2'>
 							<label htmlFor='to'>To:</label>
 							<input
 								type='text'
@@ -150,7 +183,7 @@ export function Form() {
 								onChange={(e) => setTo(e.target.value)}
 							/>
 						</div>
-						<div className='col-12 col-md-6 col-lg-4 p-2'>
+						<div className='col-12 col-md-4 col-lg-3 p-2'>
 							<label htmlFor='to_address'>To Address:</label>
 							<input
 								type='text'
@@ -162,6 +195,92 @@ export function Form() {
 								value={toAddress}
 								onChange={(e) => setToAddress(e.target.value)}
 							/>
+						</div>
+
+						<div className='col-12'>
+							<div className='row'>
+								<div className='col-12'>
+									<hr />
+								</div>
+								<div className='col-12 col-md-6 col-lg-4 p-2'>
+									<label htmlFor='nameOne'>Name (1):</label>
+									<input
+										type='text'
+										name='nameOne'
+										id='nameOne'
+										placeholder='Name (1)'
+										className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+										disabled={processing}
+										value={nameOne}
+										onChange={(e) => setNameOne(e.target.value)}
+									/>
+								</div>
+								<div className='col-12 col-md-6 col-lg-4 p-2'>
+									<label htmlFor='positionOne'>Position (1):</label>
+									<input
+										type='text'
+										name='positionOne'
+										id='positionOne'
+										placeholder='Position (1)'
+										className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+										disabled={processing}
+										value={positionOne}
+										onChange={(e) => setPositionOne(e.target.value)}
+									/>
+								</div>
+								<div className='col-12 col-md-6 col-lg-4 p-2'>
+									<label htmlFor='dateOne'>Date (1):</label>
+									<input
+										type='date'
+										name='dateOne'
+										id='dateOne'
+										placeholder='Date (1)'
+										className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+										disabled={processing}
+										value={dateOne}
+										onChange={(e) => setDateOne(e.target.value)}
+									/>
+								</div>
+								<div className='col-12 col-md-6 col-lg-4 p-2'>
+									<label htmlFor='nameTwo'>Name (2):</label>
+									<input
+										type='text'
+										name='nameTwo'
+										id='nameTwo'
+										placeholder='Name (2)'
+										className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+										disabled={processing}
+										value={nameTwo}
+										onChange={(e) => setNameTwo(e.target.value)}
+									/>
+								</div>
+								<div className='col-12 col-md-6 col-lg-4 p-2'>
+									<label htmlFor='positionTwo'>Position (2):</label>
+									<input
+										type='text'
+										name='positionTwo'
+										id='positionTwo'
+										placeholder='Position (2)'
+										className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+										disabled={processing}
+										value={positionTwo}
+										onChange={(e) => setPositionTwo(e.target.value)}
+									/>
+								</div>
+								<div className='col-12 col-md-6 col-lg-4 p-2'>
+									<label htmlFor='dateTwo'>Date (2):</label>
+									<input
+										type='date'
+										name='dateTwo'
+										id='dateTwo'
+										placeholder='Date (2)'
+										className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+										disabled={processing}
+										value={dateTwo}
+										onChange={(e) => setDateTwo(e.target.value)}
+									/>
+								</div>
+							</div>
 						</div>
 
 						<div className='col-12'>

@@ -42,10 +42,6 @@ export class BillingDetail extends Model {
 
 	@BeforeRemove()
 	async removeRows() {
-		await BillingDetailRow.getRepository()
-			.createQueryBuilder()
-			.where('formId = :id', { id: this.id })
-			.delete()
-			.execute();
+		await BillingDetailRow.getRepository().createQueryBuilder().where('detailId = :id', { id: this.id }).delete().execute();
 	}
 }

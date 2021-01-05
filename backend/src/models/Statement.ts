@@ -25,15 +25,29 @@ export class Statement extends Model {
 	@Column()
 	toAddress: string;
 
+	@Column()
+	nameOne: string;
+
+	@Column()
+	positionOne: string;
+
+	@Column()
+	dateOne: string;
+
+	@Column()
+	nameTwo: string;
+
+	@Column()
+	positionTwo: string;
+
+	@Column()
+	dateTwo: string;
+
 	@OneToMany(() => StatementRow, (row) => row.statement)
 	rows: Array<StatementRow>;
 
 	@BeforeRemove()
 	async removeRows() {
-		await StatementRow.getRepository()
-			.createQueryBuilder()
-			.where('statementId = :id', { id: this.id })
-			.delete()
-			.execute();
+		await StatementRow.getRepository().createQueryBuilder().where('statementId = :id', { id: this.id }).delete().execute();
 	}
 }

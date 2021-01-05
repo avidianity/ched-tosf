@@ -6,6 +6,7 @@ import { Statement } from '../../contracts';
 import { exceptMany, handleError } from '../../helpers';
 import { Table } from '../Shared/Table';
 import toastr from 'toastr';
+import FileDownload from 'js-file-download';
 
 export function View() {
 	const match = useRouteMatch<{ id: string }>();
@@ -19,6 +20,15 @@ export function View() {
 		} catch (error) {
 			handleError(error);
 			history.goBack();
+		}
+	};
+
+	const exportAsFile = async (id: number) => {
+		try {
+			const response = await axios.get<Blob>(`/statements/${id}/export`, { responseType: 'blob' });
+			FileDownload(response.data, response.headers['x-file-name'], response.headers['Content-Type']);
+		} catch (error) {
+			handleError(error);
 		}
 	};
 
@@ -49,8 +59,13 @@ export function View() {
 							<div className='d-flex'>
 								<h3 className='card-title align-self-center'>{statement.school}</h3>
 								<div className='d-flex ml-auto align-self-center'>
-									<button className='btn btn-info btn-sm'>
-										<i className='fas fa-file-pdf'></i> Export as PDF
+									<button
+										className='btn btn-info btn-sm'
+										onClick={(e) => {
+											e.preventDefault();
+											exportAsFile(statement.id);
+										}}>
+										<i className='fas fa-file-word'></i> Export as DOCX
 									</button>
 									<Link className='btn btn-warning btn-sm' to={`${window.location.pathname}/edit`}>
 										{' '}
@@ -114,7 +129,7 @@ export function View() {
 								To Address: <b>{statement.toAddress}</b>
 							</p>
 						</div>
-						<div className='card-body pb-5'>
+						<div className='card-body'>
 							<Table
 								data={exceptMany(statement.rows, ['id', 'createdAt', 'updatedAt'])}
 								title='Rows'
@@ -126,7 +141,36 @@ export function View() {
 								processing={false}
 								pagination={false}
 								onDeleteConfirm={func}
+								border={true}
 							/>
+						</div>
+						<div className='card-footer py-5'>
+							<div className='container-fluid'>
+								<div className='row'>
+									<div className='col-12 col-md-6'>
+										<p className='card-text'>
+											Name (1): <b>{statement.nameOne}</b>
+										</p>
+										<p className='card-text'>
+											Position (1): <b>{statement.positionOne}</b>
+										</p>
+										<p className='card-text'>
+											Date (1): <b>{dayjs(statement.dateOne).format('MMMM DD, YYYY')}</b>
+										</p>
+									</div>
+									<div className='col-12 col-md-6'>
+										<p className='card-text'>
+											Name (2): <b>{statement.nameTwo}</b>
+										</p>
+										<p className='card-text'>
+											Position (2): <b>{statement.positionTwo}</b>
+										</p>
+										<p className='card-text'>
+											Date (2): <b>{dayjs(statement.dateTwo).format('MMMM DD, YYYY')}</b>
+										</p>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

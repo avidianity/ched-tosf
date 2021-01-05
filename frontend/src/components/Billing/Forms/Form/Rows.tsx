@@ -24,18 +24,23 @@ export function Rows({ rows, setRows, processing }: Props) {
 									{
 										sequenceNumber: '',
 										studentNumber: '',
+										referenceNumber: '',
 										lastName: '',
 										givenName: '',
 										middleInitial: '',
 										degreeProgram: '',
 										year: '1st Year',
 										sex: 'Male',
-										unitsEnrolled: '',
-										nstpUnitsEnrolled: '',
+										email: '',
+										phoneNumber: '',
+										laboratoryUnits: 'N\\A',
+										computerLabUnits: 'N\\A',
+										unitsEnrolled: 'N\\A',
+										nstpUnitsEnrolled: 'N\\A',
 										tuitionFee: 'N\\A',
 										nstpFee: 'N\\A',
 										athleticFees: 'N\\A',
-										computeFees: 'N\\A',
+										computerFees: 'N\\A',
 										culturalFees: 'N\\A',
 										developmentFees: 'N\\A',
 										admissionFees: 'N\\A',
@@ -105,6 +110,23 @@ export function Rows({ rows, setRows, processing }: Props) {
 													setRows([...rows]);
 												}}
 												value={row.studentNumber}
+											/>
+										</div>
+										<div className='col-12 col-md-4 col-lg-3 form-group'>
+											<label htmlFor='referenceNumber'>Reference Number:</label>
+											<input
+												type='text'
+												name='referenceNumber'
+												id='referenceNumber'
+												placeholder='Learner&#39;s Reference Number'
+												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+												disabled={processing}
+												onChange={(e) => {
+													row.referenceNumber = e.target.value;
+													rows.splice(index, 1, row);
+													setRows([...rows]);
+												}}
+												value={row.referenceNumber}
 											/>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
@@ -215,6 +237,74 @@ export function Rows({ rows, setRows, processing }: Props) {
 											</select>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
+											<label htmlFor='email'>Email:</label>
+											<input
+												type='email'
+												name='email'
+												id='email'
+												placeholder='Email'
+												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+												disabled={processing}
+												onChange={(e) => {
+													row.email = e.target.value;
+													rows.splice(index, 1, row);
+													setRows([...rows]);
+												}}
+												value={row.email}
+											/>
+										</div>
+										<div className='col-12 col-md-4 col-lg-3 form-group'>
+											<label htmlFor='phoneNumber'>Phone Number:</label>
+											<input
+												type='text'
+												name='phoneNumber'
+												id='phoneNumber'
+												placeholder='Phone Number'
+												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+												disabled={processing}
+												onChange={(e) => {
+													row.phoneNumber = e.target.value;
+													rows.splice(index, 1, row);
+													setRows([...rows]);
+												}}
+												value={row.phoneNumber}
+											/>
+										</div>
+										<div className='col-12 col-md-4 col-lg-3 form-group'>
+											<label htmlFor='laboratoryUnits'>Laboratory Units/Subject:</label>
+											<input
+												type='text'
+												name='laboratoryUnits'
+												id='laboratoryUnits'
+												placeholder='Laboratory Units/Subject'
+												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+												disabled={processing}
+												onChange={(e) => {
+													row.laboratoryUnits = e.target.value;
+													rows.splice(index, 1, row);
+													setRows([...rows]);
+												}}
+												value={row.laboratoryUnits}
+											/>
+										</div>
+										<div className='col-12 col-md-4 col-lg-3 form-group'>
+											<label htmlFor='computerLabUnits'>Computer Lab Units:</label>
+											<input
+												type='text'
+												name='computerLabUnits'
+												id='computerLabUnits'
+												placeholder='Computer Lab Units/Subject'
+												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+												disabled={processing}
+												onChange={(e) => {
+													row.computerLabUnits = e.target.value;
+													rows.splice(index, 1, row);
+													setRows([...rows]);
+												}}
+												value={row.computerLabUnits}
+											/>
+										</div>
+										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='unitsEnrolled'>Units Enrolled:</label>
 											<input
 												type='text'
@@ -300,20 +390,20 @@ export function Rows({ rows, setRows, processing }: Props) {
 											/>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
-											<label htmlFor='computeFees'>Compute fees:</label>
+											<label htmlFor='computerFees'>Computer fees:</label>
 											<input
 												type='text'
-												name='computeFees'
-												id='computeFees'
-												placeholder='Compute fees'
+												name='computerFees'
+												id='computerFees'
+												placeholder='Computer fees'
 												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 												disabled={processing}
 												onChange={(e) => {
-													row.computeFees = e.target.value;
+													row.computerFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
 												}}
-												value={row.computeFees}
+												value={row.computerFees}
 											/>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>

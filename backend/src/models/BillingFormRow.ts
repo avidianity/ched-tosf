@@ -11,6 +11,9 @@ export class BillingFormRow extends Model {
 	studentNumber: string;
 
 	@Column()
+	referenceNumber: string;
+
+	@Column()
 	lastName: string;
 
 	@Column()
@@ -29,6 +32,18 @@ export class BillingFormRow extends Model {
 	sex: string;
 
 	@Column()
+	email: string;
+
+	@Column()
+	phoneNumber: string;
+
+	@Column()
+	laboratoryUnits: string;
+
+	@Column()
+	computerLabUnits: string;
+
+	@Column()
 	unitsEnrolled: string;
 
 	@Column()
@@ -44,7 +59,7 @@ export class BillingFormRow extends Model {
 	athleticFees: string;
 
 	@Column()
-	computeFees: string;
+	computerFees: string;
 
 	@Column()
 	culturalFees: string;
