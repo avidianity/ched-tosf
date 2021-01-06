@@ -26,6 +26,10 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
+], BillingFormRow.prototype, "referenceNumber", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
 ], BillingFormRow.prototype, "lastName", void 0);
 __decorate([
     typeorm_1.Column(),
@@ -50,6 +54,22 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
+], BillingFormRow.prototype, "email", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingFormRow.prototype, "phoneNumber", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingFormRow.prototype, "laboratoryUnits", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], BillingFormRow.prototype, "computerLabUnits", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
 ], BillingFormRow.prototype, "unitsEnrolled", void 0);
 __decorate([
     typeorm_1.Column(),
@@ -70,7 +90,7 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], BillingFormRow.prototype, "computeFees", void 0);
+], BillingFormRow.prototype, "computerFees", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)

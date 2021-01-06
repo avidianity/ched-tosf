@@ -13,7 +13,7 @@ require("express-async-errors");
 const router = express_1.Router();
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
-    const fee = await Fee_1.Fee.findOne(id, { relations: ['degrees'] });
+    const fee = await Fee_1.Fee.findOne(id, { relations: ['degrees'], order: { updatedAt: 'DESC' } });
     if (!fee) {
         throw new NotFoundException_1.NotFoundException('Fee does not exist.');
     }
@@ -44,6 +44,8 @@ router.post('/', [
     express_validator_1.body('degrees').isArray().bail(),
     express_validator_1.body('year').notEmpty().withMessage('is required.').bail().isString(),
     express_validator_1.body('costPerUnit').notEmpty().withMessage('is required.').bail().isString(),
+    express_validator_1.body('name').notEmpty().withMessage('is required.').bail().isString(),
+    express_validator_1.body('amount').notEmpty().withMessage('is required.').bail().isString(),
     express_validator_1.body('coverage').notEmpty().withMessage('is required.').bail().isString(),
     express_validator_1.body('frequencyPerAY').notEmpty().withMessage('is required.').bail().isString(),
     express_validator_1.body('referenceNumber').notEmpty().withMessage('is required.').bail().isString(),
@@ -96,6 +98,8 @@ function update() {
             express_validator_1.body('degrees').isArray().bail(),
             express_validator_1.body('year').optional().bail().isString(),
             express_validator_1.body('costPerUnit').optional().bail().isString(),
+            express_validator_1.body('name').optional().bail().isString(),
+            express_validator_1.body('amount').optional().bail().isString(),
             express_validator_1.body('coverage').optional().bail().isString(),
             express_validator_1.body('frequencyPerAY').optional().bail().isString(),
             express_validator_1.body('referenceNumber').optional().bail().isString(),

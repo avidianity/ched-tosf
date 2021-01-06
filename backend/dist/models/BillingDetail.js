@@ -18,11 +18,7 @@ const Model_1 = require("./Model");
  */
 let BillingDetail = class BillingDetail extends Model_1.Model {
     async removeRows() {
-        await BillingDetailRow_1.BillingDetailRow.getRepository()
-            .createQueryBuilder()
-            .where('formId = :id', { id: this.id })
-            .delete()
-            .execute();
+        await BillingDetailRow_1.BillingDetailRow.getRepository().createQueryBuilder().where('detailId = :id', { id: this.id }).delete().execute();
     }
 };
 __decorate([

@@ -29,13 +29,16 @@ const routes_1 = require("./routes");
 const middlewares_1 = require("./middlewares");
 require("./shims");
 require("express-async-errors");
+const path_1 = __importDefault(require("path"));
 const app = express_1.default();
 app.use(express_1.json());
 app.use(cors_1.default({
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    exposedHeaders: ['X-File-Name'],
 }));
 app.use(express_1.urlencoded({ extended: true }));
 app.use(cookie_parser_1.default());
+app.set('templatesPath', path_1.default.resolve(__dirname, '../templates'));
 // routes
 app.use('/api/auth', routes_1.auth);
 app.use('/api/tosfs', ...middlewares_1.auth(routes_1.tosf));
@@ -47,6 +50,8 @@ app.use('/api/billing/forms', ...middlewares_1.auth(routes_1.billingForm));
 app.use('/api/billing/forms/row', ...middlewares_1.auth(routes_1.billingFormRow));
 app.use('/api/billing/details', ...middlewares_1.auth(routes_1.billingDetail));
 app.use('/api/billing/details/row', ...middlewares_1.auth(routes_1.billingDetailRow));
+app.use('/api/files', ...middlewares_1.auth(routes_1.file));
+app.use('/api/counts', ...middlewares_1.auth(routes_1.count));
 app.use((_req, res) => {
     return res.status(404).end();
 });

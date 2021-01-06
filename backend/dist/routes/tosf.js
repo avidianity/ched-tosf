@@ -1,4 +1,7 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tosf = void 0;
 const express_1 = require("express");
@@ -7,9 +10,13 @@ const NotFoundException_1 = require("../exceptions/NotFoundException");
 const ValidationException_1 = require("../exceptions/ValidationException");
 const TOSF_1 = require("../models/TOSF");
 require("express-async-errors");
+const helpers_1 = require("../helpers");
+const Fee_1 = require("../models/Fee");
+const dayjs_1 = __importDefault(require("dayjs"));
+const fs_1 = __importDefault(require("fs"));
 const router = express_1.Router();
 router.get('/', async (_req, res) => {
-    return res.json(await TOSF_1.TOSF.find({ relations: ['fees'] }));
+    return res.json(await TOSF_1.TOSF.find({ relations: ['fees'], order: { updatedAt: 'DESC' } }));
 });
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
@@ -18,6 +25,44 @@ router.get('/:id', async (req, res) => {
         throw new NotFoundException_1.NotFoundException('TOSF does not exist.');
     }
     return res.json(tosf);
+});
+router.get('/:id/export', async (req, res) => {
+    const id = req.params.id;
+    const tosf = await TOSF_1.TOSF.findOne(id, { relations: ['fees'] });
+    if (!tosf) {
+        throw new NotFoundException_1.NotFoundException('TOSF does not exist.');
+    }
+    tosf.fees = await Promise.all(tosf.fees.map(async (fee) => await Fee_1.Fee.findOneOrFail(fee.id, { relations: ['degrees'] })));
+    const file = await helpers_1.exportAsFile(req.app.get('templatesPath'), 'template-tosf.docx', {
+        school: tosf.school,
+        address: tosf.address,
+        updatedAt: dayjs_1.default(tosf.updatedAt).format('MMMM DD, YYYY'),
+        preparedBy: tosf.preparedBy,
+        approvedBy: tosf.approvedBy,
+        certifiedBy: tosf.certifiedBy,
+        fees: helpers_1.groupBy(tosf.fees, 'type').map((fees) => ({
+            type: fees[0].type,
+            rows: fees.map(({ name, year, amount, degrees, coverage, frequencyPerAY, referenceNumber, dateOfApproval, description }) => ({
+                name,
+                year,
+                amount,
+                coverage,
+                frequencyPerAY,
+                referenceNumber,
+                dateOfApproval: dayjs_1.default(dateOfApproval).format('MMMM DD, YYYY'),
+                description,
+                degrees: degrees.map((degree) => ({ name: `\n${degree.name}` })),
+            })),
+        })),
+    }, 'TOSF');
+    if (!file) {
+        return res.status(500).json({ message: 'Sorry, unable to export at the moment. Please try again later.' });
+    }
+    const binary = fs_1.default.readFileSync(file.path);
+    res.setHeader('Content-Type', file.mimeType);
+    res.setHeader('Content-Length', file.size);
+    res.setHeader('X-File-Name', file.name);
+    return res.send(binary);
 });
 router.post('/', [
     express_validator_1.body('school').notEmpty().withMessage('is required.').bail().isString(),

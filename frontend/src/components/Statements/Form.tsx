@@ -82,9 +82,9 @@ export function Form() {
 			setNameOne(nameOne);
 			setPositionOne(positionOne);
 			setDateOne(dayjs(dateOne).format('YYYY-MM-DD'));
-			setNameTwo(nameOne);
-			setPositionTwo(positionOne);
-			setDateTwo(dayjs(dateOne).format('YYYY-MM-DD'));
+			setNameTwo(nameTwo);
+			setPositionTwo(positionTwo);
+			setDateTwo(dayjs(dateTwo).format('YYYY-MM-DD'));
 			setTo(to);
 			setToAddress(toAddress);
 			setRows([...exceptMany(rows, ['createdAt', 'updatedAt'])]);

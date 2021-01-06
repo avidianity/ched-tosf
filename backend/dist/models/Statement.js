@@ -18,11 +18,7 @@ const StatementRow_1 = require("./StatementRow");
  */
 let Statement = class Statement extends Model_1.Model {
     async removeRows() {
-        await StatementRow_1.StatementRow.getRepository()
-            .createQueryBuilder()
-            .where('statementId = :id', { id: this.id })
-            .delete()
-            .execute();
+        await StatementRow_1.StatementRow.getRepository().createQueryBuilder().where('statementId = :id', { id: this.id }).delete().execute();
     }
 };
 __decorate([
@@ -49,6 +45,30 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], Statement.prototype, "toAddress", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "nameOne", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "positionOne", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "dateOne", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "nameTwo", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "positionTwo", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", String)
+], Statement.prototype, "dateTwo", void 0);
 __decorate([
     typeorm_1.OneToMany(() => StatementRow_1.StatementRow, (row) => row.statement),
     __metadata("design:type", Array)

@@ -15,11 +15,7 @@ const Fee_1 = require("./Fee");
 const Model_1 = require("./Model");
 let TOSF = class TOSF extends Model_1.Model {
     async removefees() {
-        await Fee_1.Fee.getRepository()
-            .createQueryBuilder()
-            .where('tosfId = :id', { id: this.id })
-            .delete()
-            .execute();
+        await Fee_1.Fee.getRepository().createQueryBuilder().where('tosfId = :id', { id: this.id }).delete().execute();
     }
 };
 __decorate([

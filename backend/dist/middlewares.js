@@ -12,8 +12,7 @@ const ValidationException_1 = require("./exceptions/ValidationException");
 const Token_1 = require("./models/Token");
 function errorHandler(error, _req, res, _next) {
     console.error(error);
-    if (error instanceof HttpException_1.HttpException ||
-        error instanceof ValidationException_1.ValidationException) {
+    if (error instanceof HttpException_1.HttpException || error instanceof ValidationException_1.ValidationException) {
         return res.status(error.status).json(error);
     }
     return res.status(error.status || 500).json(error);
@@ -25,16 +24,26 @@ exports.errorHandler = errorHandler;
  */
 function auth(callback) {
     const middlewares = [
-        (_req, _res, next) => {
+        (req, _res, next) => {
             passport_1.default.use(new passport_http_bearer_1.Strategy(async (hash, done) => {
                 try {
-                    const token = await Token_1.Token.findOne({
+                    let token = await Token_1.Token.findOne({
                         where: {
                             hash: md5_1.default(hash),
                         },
                         relations: ['user'],
                     });
                     if (!token) {
+                        token = await Token_1.Token.findOne({
+                            where: {
+                                hash: md5_1.default(req.query.token),
+                            },
+                            relations: ['user'],
+                        });
+                        console.log('2', token);
+                    }
+                    if (!token) {
+                        console.log(token);
                         return done(null, false);
                     }
                     token.lastUsed = new Date();
