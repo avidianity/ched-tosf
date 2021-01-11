@@ -2,8 +2,8 @@ import React, { Dispatch } from 'react';
 import { BillingFormRow } from '../../../../contracts';
 
 type Props = {
-	setRows: Dispatch<React.SetStateAction<Array<Partial<BillingFormRow>>>>;
-	rows: Array<Partial<BillingFormRow>>;
+	setRows: Dispatch<React.SetStateAction<Array<BillingFormRow>>>;
+	rows: Array<BillingFormRow>;
 	processing: boolean;
 };
 
@@ -52,7 +52,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 										registrationFees: 'N\\A',
 										schoolIDFees: 'N\\A',
 										totalTOSF: '',
-									},
+									} as BillingFormRow,
 								]);
 							}}>
 							Add Row
@@ -60,7 +60,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 					</div>
 					<div className='py-1 px-2 m-1'>
 						{rows.map((row, index) => (
-							<div className='card border'>
+							<div className='card border' key={index}>
 								<div className='card-header'>
 									<h3 className='card-title'>Row {index + 1}</h3>
 									<div className='d-flex'>

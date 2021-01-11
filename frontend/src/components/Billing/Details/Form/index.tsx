@@ -21,8 +21,16 @@ export function Form() {
 	const [preparedBy, setPreparedBy] = useState('');
 	const [certifiedBy, setCertifiedBy] = useState('');
 	const [approvedBy, setApprovedBy] = useState('');
-	const [rows, setRows] = useState<Array<Partial<BillingDetailRow>>>([]);
+	const [rows, setRows] = useState<Array<BillingDetailRow>>([]);
 	const history = useHistory();
+
+	const onFeeChanged = (value: number, index: number) => {
+		const fees = rows
+			.filter((_, i) => i !== index)
+			.map((row) => row.fee.parseNumbers())
+			.reduce((i, x) => i + x, 0);
+		setTotal(`${fees + value} PHP`);
+	};
 
 	const submitRows = async (BillingDetail: BillingDetail) => {
 		if (mode === 'Edit') {
@@ -258,7 +266,7 @@ export function Form() {
 								onChange={(e) => setApprovedBy(e.target.value)}
 							/>
 						</div>
-						<Rows rows={rows} setRows={setRows} processing={processing} />
+						<Rows onFeeChanged={onFeeChanged} rows={rows} setRows={setRows} processing={processing} />
 						<div className='col-12 p-2'>
 							<button type='submit' className={`btn btn-info btn-sm ${processing ? 'disabled' : ''}`} disabled={processing}>
 								{processing ? (

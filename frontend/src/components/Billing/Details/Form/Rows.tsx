@@ -3,12 +3,13 @@ import React, { Dispatch } from 'react';
 import { BillingDetailRow } from '../../../../contracts';
 
 type Props = {
-	setRows: Dispatch<React.SetStateAction<Array<Partial<BillingDetailRow>>>>;
-	rows: Array<Partial<BillingDetailRow>>;
+	setRows: Dispatch<React.SetStateAction<Array<BillingDetailRow>>>;
+	rows: Array<BillingDetailRow>;
 	processing: boolean;
+	onFeeChanged: (value: number, index: number) => void;
 };
 
-export function Rows({ rows, setRows, processing }: Props) {
+export function Rows({ rows, setRows, processing, onFeeChanged }: Props) {
 	return (
 		<div className='col-12'>
 			<div className='p-3'>
@@ -35,7 +36,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 										number: '',
 										fee: '',
 										remarks: '',
-									},
+									} as BillingDetailRow,
 								]);
 							}}>
 							Add Row
@@ -43,7 +44,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 					</div>
 					<div className='py-1 px-2 m-1'>
 						{rows.map((row, index) => (
-							<div className='card border'>
+							<div className='card border' key={index}>
 								<div className='card-header'>
 									<h3 className='card-title'>Row {index + 1}</h3>
 									<div className='d-flex'>
@@ -249,6 +250,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.fee = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged(row.fee.parseNumbers(), index);
 												}}
 												value={row.fee}
 											/>

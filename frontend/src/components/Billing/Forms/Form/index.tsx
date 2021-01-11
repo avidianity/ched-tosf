@@ -22,8 +22,46 @@ export function Form() {
 	const [certifiedBy, setCertifiedBy] = useState('');
 	const [certifiedBySecond, setCertifiedBySecond] = useState('');
 	const [approvedBy, setApprovedBy] = useState('');
-	const [rows, setRows] = useState<Array<Partial<BillingFormRow>>>([]);
+	const [rows, setRows] = useState<Array<BillingFormRow>>([]);
 	const history = useHistory();
+
+	// let isParsingRows = useRef(false);
+
+	// useEffect(() => {
+	// 	let mounted = true;
+	// 	if (mounted) {
+	// 		isParsingRows.current = true;
+	// 		setRows(
+	// 			rows.map((row) => {
+	// 				return {
+	// 					...row,
+	// 					tuitionFee: `${row.tuitionFee.parseNumbers()} PHP`,
+	// 					nstpFee: `${row.nstpFee.parseNumbers()} PHP`,
+	// 					athleticFees: `${row.athleticFees.parseNumbers()} PHP`,
+	// 					computerFees: `${row.computerFees.parseNumbers()} PHP`,
+	// 					culturalFees: `${row.culturalFees.parseNumbers()} PHP`,
+	// 					developmentFees: `${row.developmentFees.parseNumbers()} PHP`,
+	// 					admissionFees: `${row.admissionFees.parseNumbers()} PHP`,
+	// 					guidanceFees: `${row.guidanceFees.parseNumbers()} PHP`,
+	// 					handbookFees: `${row.handbookFees.parseNumbers()} PHP`,
+	// 					laboratoryFees: `${row.laboratoryFees.parseNumbers()} PHP`,
+	// 					libraryFee: `${row.libraryFee.parseNumbers()} PHP`,
+	// 					medicalFees: `${row.medicalFees.parseNumbers()} PHP`,
+	// 					registrationFees: `${row.registrationFees.parseNumbers()} PHP`,
+	// 					schoolIDFees: `${row.schoolIDFees.parseNumbers()} PHP`,
+	// 				};
+	// 			})
+	// 		);
+	// 		isParsingRows.current = false;
+	// 		if (!isParsingRows.current) {
+	// 			const total = rows.map((row) => row.totalTOSF.parseNumbers()).reduce((i, x) => i + x, 0);
+	// 			setTotal(`${total} PHP`);
+	// 		}
+	// 	}
+	// 	return () => {
+	// 		mounted = false;
+	// 	};
+	// }, [rows]);
 
 	const submitRows = async (billingForm: BillingForm) => {
 		if (mode === 'Edit') {
