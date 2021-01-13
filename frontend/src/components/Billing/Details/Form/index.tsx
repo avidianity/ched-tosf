@@ -4,7 +4,7 @@ import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { FormMode, BillingDetailRow, BillingDetail } from '../../../../contracts';
-import { handleError, exceptMany } from '../../../../helpers';
+import { handleError, exceptMany, formatCurrency } from '../../../../helpers';
 import { Rows } from './Rows';
 
 export function Form() {
@@ -29,7 +29,15 @@ export function Form() {
 			.filter((_, i) => i !== index)
 			.map((row) => row.fee.parseNumbers())
 			.reduce((i, x) => i + x, 0);
-		setTotal(`${fees + value} PHP`);
+
+		setTotal(formatCurrency(fees + value));
+	};
+
+	const onRowRemoved = (row: BillingDetailRow) => {
+		const fee = row.fee.parseNumbers();
+		const overallTotal = total.parseNumbers();
+
+		setTotal(formatCurrency(overallTotal - fee));
 	};
 
 	const submitRows = async (BillingDetail: BillingDetail) => {
@@ -41,6 +49,7 @@ export function Form() {
 				axios.post<BillingDetailRow>('/billing/details/row', {
 					...row,
 					detailId: BillingDetail.id,
+					fee: formatCurrency(row.fee.parseNumbers()),
 				})
 			)
 		);
@@ -266,7 +275,13 @@ export function Form() {
 								onChange={(e) => setApprovedBy(e.target.value)}
 							/>
 						</div>
-						<Rows onFeeChanged={onFeeChanged} rows={rows} setRows={setRows} processing={processing} />
+						<Rows
+							onFeeChanged={onFeeChanged}
+							onRowRemoved={onRowRemoved}
+							rows={rows}
+							setRows={setRows}
+							processing={processing}
+						/>
 						<div className='col-12 p-2'>
 							<button type='submit' className={`btn btn-info btn-sm ${processing ? 'disabled' : ''}`} disabled={processing}>
 								{processing ? (

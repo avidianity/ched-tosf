@@ -7,9 +7,10 @@ type Props = {
 	rows: Array<BillingDetailRow>;
 	processing: boolean;
 	onFeeChanged: (value: number, index: number) => void;
+	onRowRemoved: (row: BillingDetailRow) => void;
 };
 
-export function Rows({ rows, setRows, processing, onFeeChanged }: Props) {
+export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: Props) {
 	return (
 		<div className='col-12'>
 			<div className='p-3'>
@@ -53,6 +54,7 @@ export function Rows({ rows, setRows, processing, onFeeChanged }: Props) {
 											disabled={processing}
 											onClick={(e) => {
 												e.preventDefault();
+												onRowRemoved(rows[index]);
 												rows.splice(index, 1);
 												setRows([...rows]);
 											}}>

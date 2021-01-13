@@ -5,9 +5,11 @@ type Props = {
 	setRows: Dispatch<React.SetStateAction<Array<BillingFormRow>>>;
 	rows: Array<BillingFormRow>;
 	processing: boolean;
+	onFeeChanged: (key: keyof BillingFormRow, value: number, index: number) => void;
+	onRowRemoved: (row: BillingFormRow) => void;
 };
 
-export function Rows({ rows, setRows, processing }: Props) {
+export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: Props) {
 	return (
 		<div className='col-12'>
 			<div className='p-3'>
@@ -69,6 +71,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 											disabled={processing}
 											onClick={(e) => {
 												e.preventDefault();
+												onRowRemoved(rows[index]);
 												rows.splice(index, 1);
 												setRows([...rows]);
 											}}>
@@ -351,6 +354,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.tuitionFee = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('tuitionFee', row.tuitionFee.parseNumbers(), index);
 												}}
 												value={row.tuitionFee}
 											/>
@@ -368,6 +372,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.nstpFee = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('nstpFee', row.nstpFee.parseNumbers(), index);
 												}}
 												value={row.nstpFee}
 											/>
@@ -385,6 +390,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.athleticFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('athleticFees', row.athleticFees.parseNumbers(), index);
 												}}
 												value={row.athleticFees}
 											/>
@@ -402,6 +408,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.computerFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('computerFees', row.computerFees.parseNumbers(), index);
 												}}
 												value={row.computerFees}
 											/>
@@ -419,6 +426,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.culturalFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('culturalFees', row.culturalFees.parseNumbers(), index);
 												}}
 												value={row.culturalFees}
 											/>
@@ -436,6 +444,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.developmentFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('developmentFees', row.developmentFees.parseNumbers(), index);
 												}}
 												value={row.developmentFees}
 											/>
@@ -453,6 +462,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.admissionFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('admissionFees', row.admissionFees.parseNumbers(), index);
 												}}
 												value={row.admissionFees}
 											/>
@@ -470,6 +480,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.guidanceFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('guidanceFees', row.guidanceFees.parseNumbers(), index);
 												}}
 												value={row.guidanceFees}
 											/>
@@ -487,6 +498,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.handbookFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('handbookFees', row.handbookFees.parseNumbers(), index);
 												}}
 												value={row.handbookFees}
 											/>
@@ -504,6 +516,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.laboratoryFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('laboratoryFees', row.laboratoryFees.parseNumbers(), index);
 												}}
 												value={row.laboratoryFees}
 											/>
@@ -521,6 +534,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.libraryFee = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('libraryFee', row.libraryFee.parseNumbers(), index);
 												}}
 												value={row.libraryFee}
 											/>
@@ -538,6 +552,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.medicalFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('medicalFees', row.medicalFees.parseNumbers(), index);
 												}}
 												value={row.medicalFees}
 											/>
@@ -555,6 +570,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.registrationFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('registrationFees', row.registrationFees.parseNumbers(), index);
 												}}
 												value={row.registrationFees}
 											/>
@@ -572,6 +588,7 @@ export function Rows({ rows, setRows, processing }: Props) {
 													row.schoolIDFees = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													onFeeChanged('schoolIDFees', row.schoolIDFees.parseNumbers(), index);
 												}}
 												value={row.schoolIDFees}
 											/>
@@ -583,12 +600,12 @@ export function Rows({ rows, setRows, processing }: Props) {
 												name='totalTOSF'
 												id='totalTOSF'
 												placeholder='Total TOSF'
-												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
-												disabled={processing}
+												className='form-control form-control-sm disabled'
+												readOnly={true}
 												onChange={(e) => {
-													row.totalTOSF = e.target.value;
-													rows.splice(index, 1, row);
-													setRows([...rows]);
+													// row.totalTOSF = e.target.value;
+													// rows.splice(index, 1, row);
+													// setRows([...rows]);
 												}}
 												value={row.totalTOSF}
 											/>

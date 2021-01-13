@@ -4,8 +4,10 @@ import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { FormMode, BillingFormRow, BillingForm } from '../../../../contracts';
-import { handleError, exceptMany } from '../../../../helpers';
+import { handleError, exceptMany, formatCurrency } from '../../../../helpers';
 import { Rows } from './Rows';
+
+type Keys = Array<keyof BillingFormRow>;
 
 export function Form() {
 	const [mode, setMode] = useState<FormMode>('Add');
@@ -25,55 +27,30 @@ export function Form() {
 	const [rows, setRows] = useState<Array<BillingFormRow>>([]);
 	const history = useHistory();
 
-	// let isParsingRows = useRef(false);
-
-	// useEffect(() => {
-	// 	let mounted = true;
-	// 	if (mounted) {
-	// 		isParsingRows.current = true;
-	// 		setRows(
-	// 			rows.map((row) => {
-	// 				return {
-	// 					...row,
-	// 					tuitionFee: `${row.tuitionFee.parseNumbers()} PHP`,
-	// 					nstpFee: `${row.nstpFee.parseNumbers()} PHP`,
-	// 					athleticFees: `${row.athleticFees.parseNumbers()} PHP`,
-	// 					computerFees: `${row.computerFees.parseNumbers()} PHP`,
-	// 					culturalFees: `${row.culturalFees.parseNumbers()} PHP`,
-	// 					developmentFees: `${row.developmentFees.parseNumbers()} PHP`,
-	// 					admissionFees: `${row.admissionFees.parseNumbers()} PHP`,
-	// 					guidanceFees: `${row.guidanceFees.parseNumbers()} PHP`,
-	// 					handbookFees: `${row.handbookFees.parseNumbers()} PHP`,
-	// 					laboratoryFees: `${row.laboratoryFees.parseNumbers()} PHP`,
-	// 					libraryFee: `${row.libraryFee.parseNumbers()} PHP`,
-	// 					medicalFees: `${row.medicalFees.parseNumbers()} PHP`,
-	// 					registrationFees: `${row.registrationFees.parseNumbers()} PHP`,
-	// 					schoolIDFees: `${row.schoolIDFees.parseNumbers()} PHP`,
-	// 				};
-	// 			})
-	// 		);
-	// 		isParsingRows.current = false;
-	// 		if (!isParsingRows.current) {
-	// 			const total = rows.map((row) => row.totalTOSF.parseNumbers()).reduce((i, x) => i + x, 0);
-	// 			setTotal(`${total} PHP`);
-	// 		}
-	// 	}
-	// 	return () => {
-	// 		mounted = false;
-	// 	};
-	// }, [rows]);
-
 	const submitRows = async (billingForm: BillingForm) => {
 		if (mode === 'Edit') {
 			await axios.delete(`/billing/forms/row/${billingForm.id}/billing`);
 		}
 		await Promise.all(
-			rows.map((row) =>
-				axios.post<BillingFormRow>('/billing/forms/row', {
-					...row,
-					formId: billingForm.id,
+			rows
+				.map((row: any) => {
+					const keys = Object.keys(row).filter((key) => key.toLowerCase().includes('fee'));
+
+					keys.forEach((key) => {
+						const value = row[key];
+						if (typeof value === 'string') {
+							row[key] = formatCurrency(value.parseNumbers());
+						}
+					});
+
+					return row;
 				})
-			)
+				.map((row) =>
+					axios.post<BillingFormRow>('/billing/forms/row', {
+						...row,
+						formId: billingForm.id,
+					})
+				)
 		);
 	};
 
@@ -104,6 +81,32 @@ export function Form() {
 		} finally {
 			setProcessing(false);
 		}
+	};
+
+	const onFeeChanged = (key: keyof BillingFormRow, value: number, index: number) => {
+		const fees = rows
+			.filter((_, i) => i !== index)
+			.map((row) => row[key].toString().parseNumbers())
+			.reduce((i, x) => i + x, 0);
+
+		const keys = Object.keys(rows[index]).filter((key) => key.toLowerCase().includes('fee')) as Keys;
+		const keysWithoutMain = keys.filter((k) => k.toLowerCase() !== key.toLowerCase()) as Keys;
+
+		const others = rows
+			.map((row) => keysWithoutMain.map((key) => row[key].toString().parseNumbers()))
+			.map((row) => row.reduce((i, x) => i + x, 0))
+			.reduce((i, x) => i + x, 0);
+
+		rows[index].totalTOSF = formatCurrency(keys.map((key) => rows[index][key].toString().parseNumbers()).reduce((i, x) => i + x));
+
+		setRows([...rows]);
+		setTotal(formatCurrency(fees + others + value));
+	};
+
+	const onRowRemoved = (row: BillingFormRow) => {
+		const subTotal = row.totalTOSF.parseNumbers();
+		const overallTotal = total.parseNumbers();
+		setTotal(formatCurrency(overallTotal - subTotal));
 	};
 
 	const fetchBillingForm = async (billingFormID: string) => {
@@ -248,20 +251,6 @@ export function Form() {
 							/>
 						</div>
 						<div className='col-12 col-md-6 col-lg-4 p-2'>
-							<label htmlFor='total'>Total:</label>
-							<input
-								type='text'
-								name='total'
-								id='total'
-								placeholder='Total'
-								className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
-								disabled={processing}
-								value={total}
-								onChange={(e) => setTotal(e.target.value)}
-							/>
-						</div>
-
-						<div className='col-12 col-md-6 col-lg-4 p-2'>
 							<label htmlFor='preparedBy'>Prepared By:</label>
 							<input
 								type='text'
@@ -319,7 +308,26 @@ export function Form() {
 								onChange={(e) => setApprovedBy(e.target.value)}
 							/>
 						</div>
-						<Rows rows={rows} setRows={setRows} processing={processing} />
+						<div className='col-12 col-md-6 col-lg-4 p-2'>
+							<label htmlFor='total'>Total:</label>
+							<input
+								type='text'
+								name='total'
+								id='total'
+								placeholder='Total'
+								className='form-control form-control-sm disabled'
+								readOnly={true}
+								value={total}
+								// onChange={(e) => setTotal(e.target.value)}
+							/>
+						</div>
+						<Rows
+							onFeeChanged={onFeeChanged}
+							onRowRemoved={onRowRemoved}
+							rows={rows}
+							setRows={setRows}
+							processing={processing}
+						/>
 						<div className='col-12 p-2'>
 							<button type='submit' className={`btn btn-info btn-sm ${processing ? 'disabled' : ''}`} disabled={processing}>
 								{processing ? (

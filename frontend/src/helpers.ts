@@ -102,3 +102,12 @@ export function except<T, K extends keyof T>(data: T, keys: Array<K>) {
 export function exceptMany<T, K extends keyof T>(data: Array<T>, keys: Array<K>) {
 	return [...data].map((item) => except(item, keys));
 }
+
+const formatter = new Intl.NumberFormat('en-PH', {
+	style: 'currency',
+	currency: 'PHP',
+});
+
+export function formatCurrency(value: number) {
+	return formatter.format(value);
+}

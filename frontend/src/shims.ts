@@ -19,11 +19,17 @@ Error.prototype.toJSON = function () {
 
 // eslint-disable-next-line
 String.prototype.parseNumbers = function () {
+	const parts = this.split('.');
+	if (parts.length > 1) {
+		const whole = (parts[0].match(/\d/g) || []).join('');
+		const decimals = (parts[1].match(/\d/g) || []).join('');
+		return Number(`${whole}.${decimals}`) || 0;
+	}
 	const match = this.match(/\d/g);
 	if (!match) {
 		return 0;
 	}
-	return Number(match.join(''));
+	return Number(match.join('')) || 0;
 };
 
 export {};
