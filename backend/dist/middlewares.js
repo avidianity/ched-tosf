@@ -40,10 +40,8 @@ function auth(callback) {
                             },
                             relations: ['user'],
                         });
-                        console.log('2', token);
                     }
                     if (!token) {
-                        console.log(token);
                         return done(null, false);
                     }
                     token.lastUsed = new Date();
