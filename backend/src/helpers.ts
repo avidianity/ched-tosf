@@ -161,3 +161,12 @@ export function groupBy<T, K extends keyof T>(data: Array<T>, key: K) {
 	});
 	return Object.keys(temp).map((key) => temp[key]);
 }
+
+const formatter = new Intl.NumberFormat('en-PH', {
+	style: 'currency',
+	currency: 'PHP',
+});
+
+export function formatCurrency(value: number) {
+	return formatter.format(value);
+}

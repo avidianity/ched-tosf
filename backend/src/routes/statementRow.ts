@@ -22,18 +22,10 @@ router.post(
 	'/',
 	[
 		body('title').notEmpty().withMessage('is required.').bail().isString(),
-		body('description')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.isString(),
+		body('description').notEmpty().withMessage('is required.').bail().isString(),
 		body('code').notEmpty().withMessage('is required.').bail().isString(),
 		body('amount').notEmpty().withMessage('is required.').bail().isString(),
-		body('statementId')
-			.notEmpty()
-			.withMessage('is required.')
-			.bail()
-			.custom(Validation.exists(Statement, 'id')),
+		body('statementId').notEmpty().withMessage('is required.').bail().custom(Validation.exists(Statement, 'id')),
 	],
 	async (req: Request, res: Response) => {
 		const errors = validationResult(req);
