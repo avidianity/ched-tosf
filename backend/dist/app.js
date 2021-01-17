@@ -29,6 +29,7 @@ const routes_1 = require("./routes");
 const middlewares_1 = require("./middlewares");
 require("express-async-errors");
 const path_1 = __importDefault(require("path"));
+const passport_1 = __importDefault(require("passport"));
 const app = express_1.default();
 app.use(express_1.json());
 app.use(cors_1.default({
@@ -37,6 +38,7 @@ app.use(cors_1.default({
 }));
 app.use(express_1.urlencoded({ extended: true }));
 app.use(cookie_parser_1.default());
+app.use(passport_1.default.initialize());
 app.set('templatesPath', path_1.default.resolve(__dirname, '../templates'));
 // routes
 app.use('/api/auth', routes_1.auth);

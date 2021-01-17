@@ -32,14 +32,6 @@ function auth(callback) {
                         relations: ['user'],
                     });
                     if (!token) {
-                        token = await Token_1.Token.findOne({
-                            where: {
-                                hash: md5_1.default(req.query.token),
-                            },
-                            relations: ['user'],
-                        });
-                    }
-                    if (!token) {
                         return done(null, false);
                     }
                     token.lastUsed = new Date();
