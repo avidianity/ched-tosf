@@ -1,16 +1,14 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import md5 from 'md5';
+import multer from 'multer';
 import passport from 'passport';
+import mimeTypes from 'mime-types';
+import path from 'path';
 import { Strategy } from 'passport-http-bearer';
-import { HttpException } from './exceptions/HttpException';
-import { ValidationException } from './exceptions/ValidationException';
 import { Token } from './models/Token';
 
 export function errorHandler(error: any, _req: Request, res: Response, _next: NextFunction) {
 	console.error(error);
-	if (error instanceof HttpException || error instanceof ValidationException) {
-		return res.status(error.status).json(error);
-	}
 	return res.status(error.status || 500).json(error);
 }
 
@@ -61,3 +59,18 @@ export function auth(callback?: Function | Function[] | Router | Router[]) {
 	}
 	return middlewares;
 }
+
+const storage = multer.diskStorage({
+	destination: (_req, _file, callback) => {
+		callback(null, path.join(__dirname, '../storage'));
+	},
+	filename: (_req, { fieldname, mimetype, filename }, callback) => {
+		const extension = mimeTypes.extension(mimetype);
+		if (!extension) {
+			return callback(new Error('Invalid extension.'), filename);
+		}
+		callback(null, `${fieldname}-${Date.now()}.${extension}`);
+	},
+});
+
+export const upload = multer({ storage });

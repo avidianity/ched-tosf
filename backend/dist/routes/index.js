@@ -22,3 +22,5 @@ __exportStar(require("./billing/detail"), exports);
 __exportStar(require("./billing/detail/row"), exports);
 __exportStar(require("./file"), exports);
 __exportStar(require("./count"), exports);
+__exportStar(require("./price"), exports);
+__exportStar(require("./student"), exports);

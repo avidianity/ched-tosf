@@ -9,7 +9,7 @@ const database = process.env.DB_NAME;
 const port = process.env.DB_PORT as number | undefined;
 const env = process.env.APP_ENV as 'local' | 'production';
 
-createConnection({
+export default createConnection({
 	type,
 	host,
 	port,

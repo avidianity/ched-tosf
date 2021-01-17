@@ -27,7 +27,6 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_1 = __importDefault(require("cors"));
 const routes_1 = require("./routes");
 const middlewares_1 = require("./middlewares");
-require("./shims");
 require("express-async-errors");
 const path_1 = __importDefault(require("path"));
 const app = express_1.default();
@@ -50,6 +49,7 @@ app.use('/api/billing/forms', ...middlewares_1.auth(routes_1.billingForm));
 app.use('/api/billing/forms/row', ...middlewares_1.auth(routes_1.billingFormRow));
 app.use('/api/billing/details', ...middlewares_1.auth(routes_1.billingDetail));
 app.use('/api/billing/details/row', ...middlewares_1.auth(routes_1.billingDetailRow));
+app.use('/api/students', ...middlewares_1.auth(routes_1.student));
 app.use('/api/files', ...middlewares_1.auth(routes_1.file));
 app.use('/api/counts', ...middlewares_1.auth(routes_1.count));
 app.use((_req, res) => {

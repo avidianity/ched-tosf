@@ -221,7 +221,7 @@ export function Table({
 											))}
 										</tbody>
 										{displayData.length >= 10 ? (
-											<tfoot className={`thead-${theme || 'light'}`}>
+											<thead className={`thead-${theme || 'light'}`}>
 												<tr>
 													{headColumns.map((column, index) => (
 														<th
@@ -238,7 +238,7 @@ export function Table({
 														</th>
 													) : null}
 												</tr>
-											</tfoot>
+											</thead>
 										) : null}
 									</table>
 									{withAction

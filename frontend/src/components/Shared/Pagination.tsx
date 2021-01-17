@@ -29,6 +29,7 @@ export function Pagination({ url, current, total, limit, onChange }: Props) {
 					<a
 						className='page-link'
 						href={makeUrl(count)}
+						tabIndex={-1}
 						onClick={(e) => {
 							e.preventDefault();
 							onChange(count);
@@ -63,6 +64,7 @@ export function Pagination({ url, current, total, limit, onChange }: Props) {
 					<a
 						className='page-link'
 						href={nextPageURL}
+						tabIndex={-1}
 						onClick={(e) => {
 							e.preventDefault();
 							// eslint-disable-next-line

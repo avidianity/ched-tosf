@@ -14,9 +14,10 @@ import {
 	billingDetailRow,
 	file,
 	count,
+	student,
+	price,
 } from './routes';
 import { auth as a, errorHandler } from './middlewares';
-import './shims';
 import 'express-async-errors';
 import path from 'path';
 
@@ -50,6 +51,10 @@ app.use('/api/billing/forms/row', ...a(billingFormRow));
 
 app.use('/api/billing/details', ...a(billingDetail));
 app.use('/api/billing/details/row', ...a(billingDetailRow));
+
+app.use('/api/prices', ...a(price));
+
+app.use('/api/students', ...a(student));
 
 app.use('/api/files', ...a(file));
 

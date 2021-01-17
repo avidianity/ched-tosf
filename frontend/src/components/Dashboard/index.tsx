@@ -3,6 +3,7 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { UserContext } from '../../contexts';
 import { routes } from '../../routes';
 import { Billing } from '../Billing';
+import { Prices } from '../Prices';
 import { Navbar } from '../Shared/Navbar';
 import { Statements } from '../Statements';
 import { TOSF } from '../TOSF';
@@ -43,9 +44,10 @@ export function Dashboard() {
 				<div className='container-fluid mt--6 pt-5'>
 					<Switch>
 						<Route path={path('/')} exact component={Counts} />
-						<Route path={path('/statements')} component={Statements} />
-						<Route path={path('/tosfs')} component={TOSF} />
+						<Route path={path(routes.STATEMENTS)} component={Statements} />
+						<Route path={path(routes.TOSF)} component={TOSF} />
 						<Route path={path('/billing')} component={Billing} />
+						<Route path={path(routes.FEES)} component={Prices} />
 					</Switch>
 				</div>
 			</div>

@@ -46,6 +46,18 @@ export function Navbar() {
 									<span className='nav-link-text'>Billing Details</span>
 								</NavLink>
 							</li>
+							<li className='nav-item'>
+								<NavLink activeClassName='active' to={path(routes.FEES)} className='nav-link'>
+									<i className='ni ni-credit-card text-danger'></i>
+									<span className='nav-link-text'>Fees Management</span>
+								</NavLink>
+							</li>
+							<li className='nav-item'>
+								<NavLink activeClassName='active' to={path(routes.STUDENTS)} className='nav-link'>
+									<i className='ni ni-circle-08 text-danger'></i>
+									<span className='nav-link-text'>Students</span>
+								</NavLink>
+							</li>
 							{/* <li className='nav-item'>
 								<NavLink activeClassName='active' to={path(routes.FILES)} className='nav-link'>
 									<i className='ni ni-archive-2 text-warning'></i>

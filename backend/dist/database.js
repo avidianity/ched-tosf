@@ -9,7 +9,7 @@ const password = process.env.DB_PASSWORD;
 const database = process.env.DB_NAME;
 const port = process.env.DB_PORT;
 const env = process.env.APP_ENV;
-typeorm_1.createConnection({
+exports.default = typeorm_1.createConnection({
     type,
     host,
     port,

@@ -9,4 +9,6 @@ export const routes = {
 	},
 	TOSF: '/tosfs',
 	FILES: '/files',
+	FEES: '/fees',
+	STUDENTS: '/students',
 };

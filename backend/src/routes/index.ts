@@ -10,3 +10,5 @@ export * from './billing/detail';
 export * from './billing/detail/row';
 export * from './file';
 export * from './count';
+export * from './price';
+export * from './student';

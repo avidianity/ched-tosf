@@ -28,30 +28,35 @@ export function Form() {
 	const history = useHistory();
 
 	const submitRows = async (billingForm: BillingForm) => {
-		if (mode === 'Edit') {
-			await axios.delete(`/billing/forms/row/${billingForm.id}/billing`);
-		}
-		await Promise.all(
-			rows
-				.map((row: any) => {
-					const keys = Object.keys(row).filter((key) => key.toLowerCase().includes('fee'));
+		try {
+			if (mode === 'Edit') {
+				await axios.delete(`/billing/forms/row/${billingForm.id}/billing`);
+			}
+			await Promise.all(
+				rows
+					.map((row: any) => {
+						const keys = Object.keys(row).filter((key) => key.toLowerCase().includes('fee'));
 
-					keys.forEach((key) => {
-						const value = row[key];
-						if (typeof value === 'string') {
-							row[key] = formatCurrency(value.parseNumbers());
-						}
-					});
+						keys.forEach((key) => {
+							const value = row[key];
+							if (typeof value === 'string') {
+								row[key] = formatCurrency(value.parseNumbers());
+							}
+						});
 
-					return row;
-				})
-				.map((row) =>
-					axios.post<BillingFormRow>('/billing/forms/row', {
-						...row,
-						formId: billingForm.id,
+						return row;
 					})
-				)
-		);
+					.map((row) =>
+						axios.post<BillingFormRow>('/billing/forms/row', {
+							...row,
+							formId: billingForm.id,
+						})
+					)
+			);
+		} catch (error) {
+			handleError(error);
+			await axios.delete(`/billing/forms/${billingForm.id}`);
+		}
 	};
 
 	const submit = async () => {

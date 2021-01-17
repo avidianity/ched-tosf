@@ -3,18 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.auth = exports.errorHandler = void 0;
+exports.upload = exports.auth = exports.errorHandler = void 0;
 const md5_1 = __importDefault(require("md5"));
+const multer_1 = __importDefault(require("multer"));
 const passport_1 = __importDefault(require("passport"));
+const mime_types_1 = __importDefault(require("mime-types"));
+const path_1 = __importDefault(require("path"));
 const passport_http_bearer_1 = require("passport-http-bearer");
-const HttpException_1 = require("./exceptions/HttpException");
-const ValidationException_1 = require("./exceptions/ValidationException");
 const Token_1 = require("./models/Token");
 function errorHandler(error, _req, res, _next) {
     console.error(error);
-    if (error instanceof HttpException_1.HttpException || error instanceof ValidationException_1.ValidationException) {
-        return res.status(error.status).json(error);
-    }
     return res.status(error.status || 500).json(error);
 }
 exports.errorHandler = errorHandler;
@@ -63,3 +61,16 @@ function auth(callback) {
     return middlewares;
 }
 exports.auth = auth;
+const storage = multer_1.default.diskStorage({
+    destination: (_req, _file, callback) => {
+        callback(null, path_1.default.join(__dirname, '../storage'));
+    },
+    filename: (_req, { fieldname, mimetype, filename }, callback) => {
+        const extension = mime_types_1.default.extension(mimetype);
+        if (!extension) {
+            return callback(new Error('Invalid extension.'), filename);
+        }
+        callback(null, `${fieldname}-${Date.now()}.${extension}`);
+    },
+});
+exports.upload = multer_1.default({ storage });

@@ -1,0 +1,272 @@
+[
+	{
+		"type": "Tuition Fees",
+		"name": "Tuition Fee (RA 10931-Free HE)",
+		"amount": "100",
+		"first": "100/unit",
+		"second": "100/unit",
+		"third": "100/unit",
+		"fourth": "100/unit"
+	},
+	{
+		"type": "Tuition Fees",
+		"name": "Advanced ROTC",
+		"amount": "100",
+		"first": "100/unit",
+		"second": "100/unit",
+		"third": "100/unit",
+		"fourth": "100/unit"
+	},
+	{
+		"type": "Tuition Fees",
+		"name": "NSTP/CWTS/MTS",
+		"amount": "150",
+		"first": "150",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Admission Fee",
+		"name": "Admission Fees",
+		"amount": "250",
+		"first": "250",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Athletic Fee",
+		"name": "Athetics",
+		"amount": "75",
+		"first": "75",
+		"second": "75",
+		"third": "75",
+		"fourth": "75"
+	},
+	{
+		"type": "Athletic Fee",
+		"name": "SCUAA",
+		"amount": "100",
+		"first": "100",
+		"second": "100",
+		"third": "100",
+		"fourth": "100"
+	},
+	{
+		"type": "Computer Fee",
+		"name": "AVF",
+		"amount": "100",
+		"first": "100",
+		"second": "100",
+		"third": "100",
+		"fourth": "100"
+	},
+	{
+		"type": "Computer Fee",
+		"name": "Computer Laboratory Fees (per subject)",
+		"amount": "300",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Cultural Fee",
+		"name": "Cultural Fees",
+		"amount": "75",
+		"first": "75",
+		"second": "75",
+		"third": "75",
+		"fourth": "75"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Student Development Fee",
+		"amount": "400",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Affiliation/OJT Fees",
+		"amount": "400",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Student Publication/Newsletter",
+		"amount": "75",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Yearbook (graduation student/s only)",
+		"amount": "700",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Development Fee",
+		"name": "SSC Fee",
+		"amount": "170",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Diploma",
+		"amount": "210",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Graduation Fee",
+		"amount": "300",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Council Fee (CCJE) 1st sem only",
+		"amount": "450",
+		"first": "450",
+		"second": "450",
+		"third": "450",
+		"fourth": "450"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Council Fee (COE) 1st sem only",
+		"amount": "470",
+		"first": "470",
+		"second": "470",
+		"third": "470",
+		"fourth": "470"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Council Fee (SICT) 1st sem only",
+		"amount": "500",
+		"first": "500",
+		"second": "500",
+		"third": "500",
+		"fourth": "500"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Council Fee (SOIT) 1st sem only",
+		"amount": "500",
+		"first": "500",
+		"second": "500",
+		"third": "500",
+		"fourth": "500"
+	},
+	{
+		"type": "Development Fee",
+		"name": "Council Fee (SOM) 1st sem only",
+		"amount": "450",
+		"first": "450",
+		"second": "450",
+		"third": "450",
+		"fourth": "450"
+	},
+	{
+		"type": "Guidance Fee",
+		"name": "Psychometric Fee",
+		"amount": "100",
+		"first": "100",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Others",
+		"name": "Student Handbook (For new student/transferee)",
+		"amount": "150",
+		"first": "150",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Laboratory Fee",
+		"name": "Laboratory Fees",
+		"amount": "200",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Laboratory Fee",
+		"name": "Drawing Fees",
+		"amount": "100",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	},
+	{
+		"type": "Library Fee",
+		"name": "Library Fee",
+		"amount": "100",
+		"first": "100",
+		"second": "100",
+		"third": "100",
+		"fourth": "100"
+	},
+	{
+		"type": "Medical & Dental Fee",
+		"name": "Medical/Dental",
+		"amount": "75",
+		"first": "75",
+		"second": "75",
+		"third": "75",
+		"fourth": "75"
+	},
+	{
+		"type": "Medical & Dental Fee",
+		"name": "Student Insurance Fee",
+		"amount": "25",
+		"first": "25",
+		"second": "25",
+		"third": "25",
+		"fourth": "25"
+	},
+	{
+		"type": "Registration Fee",
+		"name": "Registration Fees",
+		"amount": "50",
+		"first": "50",
+		"second": "50",
+		"third": "50",
+		"fourth": "50"
+	},
+	{
+		"type": "Others",
+		"name": "Tutorial Fees",
+		"amount": "1500",
+		"first": "N\\A",
+		"second": "N\\A",
+		"third": "N\\A",
+		"fourth": "N\\A"
+	}
+]

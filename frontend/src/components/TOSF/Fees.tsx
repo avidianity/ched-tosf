@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import React, { Dispatch, SetStateAction } from 'react';
-import { FeeTypes } from '../../contracts';
 
 interface Fee {
 	type: FeeTypes;
@@ -99,6 +98,7 @@ export function Fees({ setFees, fees, processing, degrees }: Props) {
 												<option value='Registration Fee'>Registration Fee</option>
 												<option value='Admission Fee'>Admission Fee</option>
 												<option value='Entrance Fee'>Entrance Fee</option>
+												<option value='Others'>Others</option>
 											</select>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>

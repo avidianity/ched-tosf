@@ -1,11 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 
+type Key = 'statements' | 'tosfs' | 'billingForms' | 'billingDetails' | 'students' | 'fees';
+
 type CountResponse = {
-	statements: number;
-	tosfs: number;
-	billingForms: number;
-	billingDetails: number;
+	[key in Key]: number;
 };
 
 export function Counts() {
@@ -13,16 +12,20 @@ export function Counts() {
 	const [tosfs, setTOSFs] = useState(0);
 	const [billingForms, setBillingForms] = useState(0);
 	const [billingDetails, setBillingDetails] = useState(0);
+	const [students, setStudents] = useState(0);
+	const [fees, setFees] = useState(0);
 
 	const fetchCounts = async () => {
 		try {
 			const {
-				data: { statements, tosfs, billingDetails, billingForms },
+				data: { statements, tosfs, billingDetails, billingForms, students, fees },
 			} = await axios.get<CountResponse>('/counts');
 			setStatements(statements);
 			setTOSFs(tosfs);
 			setBillingForms(billingForms);
 			setBillingDetails(billingDetails);
+			setStudents(students);
+			setFees(fees);
 		} catch (error) {
 			console.log(error.toJSON());
 		}
@@ -99,6 +102,40 @@ export function Counts() {
 							<div className='col-auto'>
 								<div className='icon icon-shape bg-gradient-info text-white rounded-circle shadow'>
 									<i className='ni ni-compass-04'></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div className='col-md-6'>
+				<div className='card card-stats'>
+					<div className='card-body'>
+						<div className='row'>
+							<div className='col'>
+								<h5 className='card-title text-uppercase text-muted mb-0'>Total Students</h5>
+								<span className='h2 font-weight-bold mb-0'>{students}</span>
+							</div>
+							<div className='col-auto'>
+								<div className='icon icon-shape bg-gradient-blue text-white rounded-circle shadow'>
+									<i className='ni ni-circle-08'></i>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div className='col-md-6'>
+				<div className='card card-stats'>
+					<div className='card-body'>
+						<div className='row'>
+							<div className='col'>
+								<h5 className='card-title text-uppercase text-muted mb-0'>Total Fees</h5>
+								<span className='h2 font-weight-bold mb-0'>{fees}</span>
+							</div>
+							<div className='col-auto'>
+								<div className='icon icon-shape bg-gradient-yellow text-white rounded-circle shadow'>
+									<i className='ni ni-credit-card'></i>
 								</div>
 							</div>
 						</div>

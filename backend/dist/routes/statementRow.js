@@ -20,18 +20,10 @@ router.get('/:id', async (req, res) => {
 });
 router.post('/', [
     express_validator_1.body('title').notEmpty().withMessage('is required.').bail().isString(),
-    express_validator_1.body('description')
-        .notEmpty()
-        .withMessage('is required.')
-        .bail()
-        .isString(),
+    express_validator_1.body('description').notEmpty().withMessage('is required.').bail().isString(),
     express_validator_1.body('code').notEmpty().withMessage('is required.').bail().isString(),
     express_validator_1.body('amount').notEmpty().withMessage('is required.').bail().isString(),
-    express_validator_1.body('statementId')
-        .notEmpty()
-        .withMessage('is required.')
-        .bail()
-        .custom(helpers_1.Validation.exists(Statement_1.Statement, 'id')),
+    express_validator_1.body('statementId').notEmpty().withMessage('is required.').bail().custom(helpers_1.Validation.exists(Statement_1.Statement, 'id')),
 ], async (req, res) => {
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {

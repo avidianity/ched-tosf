@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Degree, FeeTypes, FormMode, TOSF, Fee as ParentFee } from '../../contracts';
+import { Degree, FormMode, TOSF, Fee as ParentFee } from '../../contracts';
 import { handleError } from '../../helpers';
 import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';

@@ -40,19 +40,24 @@ export function Form() {
 		setTotal(formatCurrency(overallTotal - fee));
 	};
 
-	const submitRows = async (BillingDetail: BillingDetail) => {
-		if (mode === 'Edit') {
-			await axios.delete(`/billing/details/row/${BillingDetail.id}/billing`);
+	const submitRows = async (billingDetail: BillingDetail) => {
+		try {
+			if (mode === 'Edit') {
+				await axios.delete(`/billing/details/row/${billingDetail.id}/billing`);
+			}
+			await Promise.all(
+				rows.map((row) =>
+					axios.post<BillingDetailRow>('/billing/details/row', {
+						...row,
+						detailId: billingDetail.id,
+						fee: formatCurrency(row.fee.parseNumbers()),
+					})
+				)
+			);
+		} catch (error) {
+			handleError(error);
+			await axios.delete(`/billing/details/${billingDetail.id}`);
 		}
-		await Promise.all(
-			rows.map((row) =>
-				axios.post<BillingDetailRow>('/billing/details/row', {
-					...row,
-					detailId: BillingDetail.id,
-					fee: formatCurrency(row.fee.parseNumbers()),
-				})
-			)
-		);
 	};
 
 	const submit = async () => {
@@ -113,7 +118,12 @@ export function Form() {
 			setPreparedBy(preparedBy);
 			setCertifiedBy(certifiedBy);
 			setApprovedBy(approvedBy);
-			setRows([...exceptMany(rows, ['createdAt', 'updatedAt'])]);
+			setRows([
+				...exceptMany(rows, ['createdAt', 'updatedAt']).map((row) => ({
+					...row,
+					birthday: dayjs(row.birthday).format('YYYY-MM-DD'),
+				})),
+			]);
 		} catch (error) {
 			handleError(error);
 			history.goBack();

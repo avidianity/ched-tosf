@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.groupBy = exports.exportAsFile = exports.Hash = exports.Validation = exports.String = void 0;
+exports.formatCurrency = exports.groupBy = exports.exportAsFile = exports.Hash = exports.Validation = exports.String = void 0;
 const bcrypt_1 = require("bcrypt");
 const express_validator_1 = require("express-validator");
 const ValidationException_1 = require("./exceptions/ValidationException");
@@ -163,3 +163,11 @@ function groupBy(data, key) {
     return Object.keys(temp).map((key) => temp[key]);
 }
 exports.groupBy = groupBy;
+const formatter = new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+});
+function formatCurrency(value) {
+    return formatter.format(value);
+}
+exports.formatCurrency = formatCurrency;
