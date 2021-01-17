@@ -49,6 +49,7 @@ app.use('/api/billing/forms', ...middlewares_1.auth(routes_1.billingForm));
 app.use('/api/billing/forms/row', ...middlewares_1.auth(routes_1.billingFormRow));
 app.use('/api/billing/details', ...middlewares_1.auth(routes_1.billingDetail));
 app.use('/api/billing/details/row', ...middlewares_1.auth(routes_1.billingDetailRow));
+app.use('/api/prices', ...middlewares_1.auth(routes_1.price));
 app.use('/api/students', ...middlewares_1.auth(routes_1.student));
 app.use('/api/files', ...middlewares_1.auth(routes_1.file));
 app.use('/api/counts', ...middlewares_1.auth(routes_1.count));

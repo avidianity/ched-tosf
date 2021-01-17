@@ -66,6 +66,15 @@ function update() {
 }
 router.put('/:id', ...update());
 router.patch('/:id', ...update());
+router.delete('/:id/billing', async (req, res) => {
+    const id = req.params.id;
+    const detail = await BillingDetail_1.BillingDetail.findOne(id, { relations: ['rows'] });
+    if (!detail) {
+        throw new NotFoundException_1.NotFoundException('Billing Detail does not exist.');
+    }
+    await Promise.all(detail.rows.map((row) => row.remove()));
+    return res.sendStatus(204);
+});
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
     const row = await BillingDetailRow_1.BillingDetailRow.findOne(id);
