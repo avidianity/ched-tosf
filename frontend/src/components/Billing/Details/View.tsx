@@ -103,8 +103,8 @@ export function View() {
 														onClick={(e) => {
 															e.preventDefault();
 															const modal = $(`#deleteModalBillingDetail`) as any;
-															modal.on('hidden.bs.modal', () => deleteBillingDetail(billingDetail));
 															modal.modal('hide');
+															deleteBillingDetail(billingDetail);
 														}}>
 														Confirm
 													</button>

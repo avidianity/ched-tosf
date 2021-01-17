@@ -30,17 +30,9 @@ export function auth(callback?: Function | Function[] | Router | Router[]) {
 						});
 
 						if (!token) {
-							token = await Token.findOne({
-								where: {
-									hash: md5(req.query.token as string),
-								},
-								relations: ['user'],
-							});
-						}
-
-						if (!token) {
 							return done(null, false);
 						}
+
 						token.lastUsed = new Date();
 						token.save().catch(console.error);
 						return done(null, token.user);

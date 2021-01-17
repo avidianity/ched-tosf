@@ -1,4 +1,4 @@
-import { BeforeRemove, Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+import { AfterRemove, Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { File } from './File';
 import { Model } from './Model';
 
@@ -137,8 +137,8 @@ export class Student extends Model {
 	@JoinColumn()
 	photo: File;
 
-	@BeforeRemove()
-	async removePhoto() {
-		await this.photo.remove();
+	@AfterRemove()
+	removePhoto() {
+		this.photo.remove();
 	}
 }

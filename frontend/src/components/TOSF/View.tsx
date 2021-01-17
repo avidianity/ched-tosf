@@ -118,8 +118,8 @@ export function View() {
 														onClick={(e) => {
 															e.preventDefault();
 															const modal = $(`#deleteModalTOSF`) as any;
-															modal.on('hidden.bs.modal', () => deleteTOSF(tosf));
 															modal.modal('hide');
+															deleteTOSF(tosf);
 														}}>
 														Confirm
 													</button>

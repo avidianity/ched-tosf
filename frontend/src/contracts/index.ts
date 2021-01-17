@@ -11,5 +11,6 @@ export * from './StatementRow';
 export * from './TOSF';
 export * from './User';
 export * from './Student';
+export * from './File';
 
 export type FormMode = 'Add' | 'Edit';

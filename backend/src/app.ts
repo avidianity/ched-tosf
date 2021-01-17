@@ -20,6 +20,7 @@ import {
 import { auth as a, errorHandler } from './middlewares';
 import 'express-async-errors';
 import path from 'path';
+import passport from 'passport';
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(
 );
 app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(passport.initialize());
 
 app.set('templatesPath', path.resolve(__dirname, '../templates'));
 

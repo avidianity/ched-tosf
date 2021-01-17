@@ -84,8 +84,7 @@ export function parseDate(date: string) {
 
 export function makeMask<T extends Function>(callable: T, callback: Function) {
 	return (((data: any) => {
-		callback(data);
-		return callable(data);
+		return callable(callback(data));
 	}) as unknown) as T;
 }
 
@@ -105,6 +104,7 @@ export function exceptMany<T, K extends keyof T>(data: Array<T>, keys: Array<K>)
 
 export function only<T, K extends keyof T>(data: T, keys: Array<K>) {
 	const result = {} as T;
+	(result as any)['id'] = (data as any)['id'];
 	for (const key of keys) {
 		result[key] = data[key];
 	}

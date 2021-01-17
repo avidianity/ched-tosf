@@ -275,8 +275,8 @@ export function Table<T>({
 																	onClick={(e) => {
 																		e.preventDefault();
 																		const modal = $(`#deleteModal${index}`) as any;
-																		modal.on('hidden.bs.modal', () => onDeleteConfirm(item));
 																		modal.modal('hide');
+																		onDeleteConfirm(item);
 																	}}>
 																	Confirm
 																</button>

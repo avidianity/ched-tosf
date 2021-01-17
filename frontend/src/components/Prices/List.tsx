@@ -4,7 +4,6 @@ import { Price } from '../../contracts';
 import { Table } from '../Shared/Table';
 import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { formatCurrency } from '../../helpers';
 
 export function List() {
 	const [prices, setPrices] = useState<Array<Price>>([]);
