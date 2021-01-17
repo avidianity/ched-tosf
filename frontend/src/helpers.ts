@@ -29,7 +29,7 @@ export function handleError(error: any) {
 					const array = msg.split(' ');
 
 					if (array[0].trim().toLowerCase() !== param.trim().toLowerCase() && msg.includes('required')) {
-						return `${ucfirst(sentencify(param))} ${msg}`;
+						return `${sentencify(param)} ${msg}`;
 					}
 					return msg;
 				})
@@ -103,11 +103,23 @@ export function exceptMany<T, K extends keyof T>(data: Array<T>, keys: Array<K>)
 	return [...data].map((item) => except(item, keys));
 }
 
+export function only<T, K extends keyof T>(data: T, keys: Array<K>) {
+	const result = {} as T;
+	for (const key of keys) {
+		result[key] = data[key];
+	}
+	return result;
+}
+
+export function onlyMany<T, K extends keyof T>(data: Array<T>, keys: Array<K>) {
+	return [...data].map((item) => only(item, keys));
+}
+
 const formatter = new Intl.NumberFormat('en-PH', {
 	style: 'currency',
 	currency: 'PHP',
 });
 
 export function formatCurrency(value: number) {
-	return formatter.format(value);
+	return formatter.format(value).replace(/\D00(?=\D*$)/, '');
 }

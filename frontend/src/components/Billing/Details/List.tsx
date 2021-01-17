@@ -28,7 +28,7 @@ export function List() {
 		}
 	};
 
-	const deleteBillingDetail = async ({ id }: BillingDetail) => {
+	const deleteBillingDetail = async (id: number) => {
 		setProcessing(true);
 		try {
 			await Axios.delete(`/billing/details/${id}`);
@@ -54,17 +54,14 @@ export function List() {
 			}))}
 			processing={processing}
 			onAddClick={() => history.push(path('add'))}
-			onViewClick={(index) => {
-				const { id } = billingDetails[index];
+			onViewClick={({ id }) => {
 				history.push(path(`${id}`));
 			}}
-			onEditClick={(index) => {
-				const { id } = billingDetails[index];
+			onEditClick={({ id }) => {
 				history.push(path(`${id}/edit`));
 			}}
-			onDeleteConfirm={(index) => {
-				const billingDetail = billingDetails[index];
-				deleteBillingDetail(billingDetail);
+			onDeleteConfirm={({ id }) => {
+				deleteBillingDetail(id);
 			}}
 			onRefreshClick={fetchBillingDetails}
 			withAction={true}

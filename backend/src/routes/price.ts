@@ -101,7 +101,7 @@ function update() {
 
 			const id = req.params.id;
 
-			const price = await Price.findOne(id, { relations: ['degrees'] });
+			const price = await Price.findOne(id);
 
 			if (!price) {
 				throw new NotFoundException('Price does not exist.');

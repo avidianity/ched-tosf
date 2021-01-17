@@ -6,6 +6,7 @@ import { Billing } from '../Billing';
 import { Prices } from '../Prices';
 import { Navbar } from '../Shared/Navbar';
 import { Statements } from '../Statements';
+import { Students } from '../Students';
 import { TOSF } from '../TOSF';
 import { Counts } from './Counts';
 import { Header } from './Header';
@@ -48,6 +49,7 @@ export function Dashboard() {
 						<Route path={path(routes.TOSF)} component={TOSF} />
 						<Route path={path('/billing')} component={Billing} />
 						<Route path={path(routes.FEES)} component={Prices} />
+						<Route path={path(routes.STUDENTS)} component={Students} />
 					</Switch>
 				</div>
 			</div>

@@ -1,53 +1,53 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Price } from '../../contracts';
+import { Student } from '../../contracts';
 import { Table } from '../Shared/Table';
 import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { formatCurrency } from '../../helpers';
+import { onlyMany } from '../../helpers';
 
 export function List() {
-	const [prices, setPrices] = useState<Array<Price>>([]);
+	const [students, setStudents] = useState<Array<Student>>([]);
 	const [processing, setProcessing] = useState(false);
 	const match = useRouteMatch();
 	const history = useHistory();
 
 	const path = (path: string) => `${match.path}${path}`;
 
-	const fetchPrices = async () => {
+	const fetchStudents = async () => {
 		setProcessing(true);
 		try {
-			const { data } = await Axios.get<Array<Price>>('/prices');
-			setPrices(data);
+			const { data } = await Axios.get<Array<Student>>('/students');
+			setStudents(data);
 		} catch (error) {
 			console.log(error.toJSON());
-			toastr.error('Unable to fetch prices.');
+			toastr.error('Unable to fetch students.');
 		} finally {
 			setProcessing(false);
 		}
 	};
 
-	const deletePrice = async (id: number) => {
+	const deleteStudent = async (id: number) => {
 		setProcessing(true);
 		try {
-			await Axios.delete(`/prices/${id}`);
-			toastr.success('Price deleted successfully.');
-			await fetchPrices();
+			await Axios.delete(`/students/${id}`);
+			toastr.success('Student deleted successfully.');
+			await fetchStudents();
 		} catch (error) {
 			console.log(error.toJSON());
-			toastr.error('Unable to delete price.');
+			toastr.error('Unable to delete student.');
 			setProcessing(false);
 		}
 	};
 
 	useEffect(() => {
-		fetchPrices();
+		fetchStudents();
 	}, []);
 
 	return (
 		<Table
-			title='Prices'
-			data={prices}
+			title='Students'
+			data={onlyMany(students, ['firstName', 'middleName', 'lastName', 'status', 'course', 'major', 'sex'])}
 			processing={processing}
 			onAddClick={() => history.push(path('add'))}
 			onViewClick={({ id }) => {
@@ -57,9 +57,9 @@ export function List() {
 				history.push(path(`${id}/edit`));
 			}}
 			onDeleteConfirm={({ id }) => {
-				deletePrice(id);
+				deleteStudent(id);
 			}}
-			onRefreshClick={fetchPrices}
+			onRefreshClick={fetchStudents}
 			withAction={true}
 			pagination={true}
 		/>

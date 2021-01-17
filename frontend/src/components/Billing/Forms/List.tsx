@@ -28,7 +28,7 @@ export function List() {
 		}
 	};
 
-	const deleteBillingForm = async ({ id }: BillingForm) => {
+	const deleteBillingForm = async (id: number) => {
 		setProcessing(true);
 		try {
 			await Axios.delete(`/billing/forms/${id}`);
@@ -54,17 +54,14 @@ export function List() {
 			}))}
 			processing={processing}
 			onAddClick={() => history.push(path('add'))}
-			onViewClick={(index) => {
-				const { id } = billingForms[index];
+			onViewClick={({ id }) => {
 				history.push(path(`${id}`));
 			}}
-			onEditClick={(index) => {
-				const { id } = billingForms[index];
+			onEditClick={({ id }) => {
 				history.push(path(`${id}/edit`));
 			}}
-			onDeleteConfirm={(index) => {
-				const billingForm = billingForms[index];
-				deleteBillingForm(billingForm);
+			onDeleteConfirm={({ id }) => {
+				deleteBillingForm(id);
 			}}
 			onRefreshClick={fetchBillingForms}
 			withAction={true}

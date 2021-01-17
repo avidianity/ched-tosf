@@ -5,4 +5,5 @@ export interface File extends Model {
 	name: string;
 	available: boolean;
 	size: number;
+	url: string;
 }

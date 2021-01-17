@@ -27,7 +27,7 @@ export function List() {
 		}
 	};
 
-	const deleteTOSF = async ({ id }: TOSF) => {
+	const deleteTOSF = async (id: number) => {
 		setProcessing(true);
 		try {
 			await Axios.delete(`/TOSFs/${id}`);
@@ -50,17 +50,14 @@ export function List() {
 			data={exceptMany(TOSFs, ['fees'])}
 			processing={processing}
 			onAddClick={() => history.push(path('add'))}
-			onViewClick={(index) => {
-				const { id } = TOSFs[index];
+			onViewClick={({ id }) => {
 				history.push(path(`${id}`));
 			}}
-			onEditClick={(index) => {
-				const { id } = TOSFs[index];
+			onEditClick={({ id }) => {
 				history.push(path(`${id}/edit`));
 			}}
-			onDeleteConfirm={(index) => {
-				const TOSF = TOSFs[index];
-				deleteTOSF(TOSF);
+			onDeleteConfirm={({ id }) => {
+				deleteTOSF(id);
 			}}
 			onRefreshClick={fetchTOSFs}
 			withAction={true}

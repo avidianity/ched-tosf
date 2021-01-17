@@ -6,23 +6,23 @@ import { Pagination } from './Pagination';
 import { State } from '../../state';
 import _ from 'lodash';
 
-type Props = {
+type Props<T> = {
 	title: string;
 	theme?: 'light' | 'dark';
 	columns?: Array<string>;
-	data: Array<any>;
-	onViewClick: (index: number) => void;
-	onEditClick: (index: number) => void;
+	data: Array<T>;
+	onViewClick: (data: T) => void;
+	onEditClick: (data: T) => void;
 	onRefreshClick: () => void;
 	onAddClick: () => void;
-	onDeleteConfirm: (index: number) => void;
+	onDeleteConfirm: (data: T) => void;
 	processing: boolean;
 	withAction: boolean;
 	pagination: boolean;
 	border?: boolean;
 };
 
-export function Table({
+export function Table<T>({
 	title,
 	theme,
 	columns,
@@ -36,7 +36,7 @@ export function Table({
 	withAction,
 	pagination,
 	border,
-}: Props) {
+}: Props<T>) {
 	const headColumns = columns || createTableColumns(data);
 	const match = useRouteMatch();
 
@@ -197,11 +197,11 @@ export function Table({
 																	<i className='fas fa-ellipsis-v'></i>
 																</button>
 																<div className='dropdown-menu dropdown-menu-right dropdown-menu-arrow'>
-																	<button className='dropdown-item' onClick={() => onViewClick(index)}>
+																	<button className='dropdown-item' onClick={() => onViewClick(item)}>
 																		<i className='ni ni-active-40 text-info'></i>
 																		View
 																	</button>
-																	<button className='dropdown-item' onClick={() => onEditClick(index)}>
+																	<button className='dropdown-item' onClick={() => onEditClick(item)}>
 																		<i className='ni ni-ruler-pencil text-warning'></i>
 																		Edit
 																	</button>
@@ -242,7 +242,7 @@ export function Table({
 										) : null}
 									</table>
 									{withAction
-										? data.map((_, index) => (
+										? displayData.map((item, index) => (
 												<div
 													key={index}
 													className='modal fade'
@@ -275,7 +275,7 @@ export function Table({
 																	onClick={(e) => {
 																		e.preventDefault();
 																		const modal = $(`#deleteModal${index}`) as any;
-																		modal.on('hidden.bs.modal', () => onDeleteConfirm(index));
+																		modal.on('hidden.bs.modal', () => onDeleteConfirm(item));
 																		modal.modal('hide');
 																	}}>
 																	Confirm

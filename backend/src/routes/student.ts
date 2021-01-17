@@ -10,11 +10,11 @@ import { Student } from '../models/Student';
 
 const router = Router();
 
-router.get('/', async (_, { json }) => {
-	return json(await Student.find({ relations: ['photo'] }));
+router.get('/', async (_, res) => {
+	return res.json(await Student.find({ relations: ['photo'] }));
 });
 
-router.get('/:id', async (req, { json }) => {
+router.get('/:id', async (req, res) => {
 	const id = req.params.id;
 
 	const student = await Student.findOne(id, { relations: ['photo'] });
@@ -23,7 +23,7 @@ router.get('/:id', async (req, { json }) => {
 		throw new NotFoundException('Student does not exist.');
 	}
 
-	return json(student);
+	return res.json(student);
 });
 
 router.post(
@@ -75,7 +75,7 @@ router.post(
 		body('talents').notEmpty().withMessage('is required.').bail().isString(),
 	],
 	Validation.validate(),
-	async (req: Request, { json }: Response) => {
+	async (req: Request, res: Response) => {
 		const data = req.body;
 
 		if (!req.file) {
@@ -95,7 +95,7 @@ router.post(
 		const student = new Student(data);
 		student.photo = file;
 
-		return json(await student.save());
+		return res.json(await student.save());
 	}
 );
 
@@ -148,7 +148,7 @@ function update() {
 			body('talents').optional().bail().isString(),
 		],
 		Validation.validate(),
-		async (req: Request, { json }: Response) => {
+		async (req: Request, res: Response) => {
 			const data = req.body;
 
 			const id = req.params.id;
@@ -176,7 +176,7 @@ function update() {
 				student.photo = file;
 			}
 
-			return json(await student.forceFill(data).save());
+			return res.json(await student.forceFill(data).save());
 		},
 	];
 }
@@ -184,7 +184,7 @@ function update() {
 router.put('/:id', ...update());
 router.patch('/:id', ...update());
 
-router.delete('/:id', async (req, { sendStatus }) => {
+router.delete('/:id', async (req, res) => {
 	const id = req.params.id;
 
 	const student = await Student.findOne(id, { relations: ['photo'] });
@@ -195,7 +195,7 @@ router.delete('/:id', async (req, { sendStatus }) => {
 
 	await student.remove();
 
-	return sendStatus(204);
+	return res.sendStatus(204);
 });
 
 export const student = router;

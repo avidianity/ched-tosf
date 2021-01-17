@@ -28,7 +28,7 @@ export function List() {
 		}
 	};
 
-	const deleteStatement = async ({ id }: Statement) => {
+	const deleteStatement = async (id: number) => {
 		setProcessing(true);
 		try {
 			await Axios.delete(`/statements/${id}`);
@@ -56,17 +56,14 @@ export function List() {
 			}))}
 			processing={processing}
 			onAddClick={() => history.push(path('add'))}
-			onViewClick={(index) => {
-				const { id } = statements[index];
+			onViewClick={({ id }) => {
 				history.push(path(`${id}`));
 			}}
-			onEditClick={(index) => {
-				const { id } = statements[index];
+			onEditClick={({ id }) => {
 				history.push(path(`${id}/edit`));
 			}}
-			onDeleteConfirm={(index) => {
-				const statement = statements[index];
-				deleteStatement(statement);
+			onDeleteConfirm={({ id }) => {
+				deleteStatement(id);
 			}}
 			onRefreshClick={fetchStatements}
 			withAction={true}
