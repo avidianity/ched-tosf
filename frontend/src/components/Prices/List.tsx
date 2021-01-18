@@ -4,6 +4,7 @@ import { Price } from '../../contracts';
 import { Table } from '../Shared/Table';
 import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import { createTableColumns, ucwords } from '../../helpers';
 
 export function List() {
 	const [prices, setPrices] = useState<Array<Price>>([]);
@@ -46,6 +47,12 @@ export function List() {
 	return (
 		<Table
 			title='Prices'
+			columns={createTableColumns(prices).map((column) => {
+				if (['first', 'second', 'third', 'fourth'].includes(column.toLowerCase())) {
+					return ucwords(`${column} Year`);
+				}
+				return column;
+			})}
 			data={prices}
 			processing={processing}
 			onAddClick={() => history.push(path('add'))}
