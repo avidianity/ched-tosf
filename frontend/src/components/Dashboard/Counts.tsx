@@ -38,7 +38,7 @@ export function Counts() {
 
 	return (
 		<div className='row'>
-			<div className='col-xl-3 col-md-6'>
+			<div className='col-xl-3 col-md-6 p-2'>
 				<div className='card card-stats'>
 					<div className='card-body'>
 						<div className='row'>
@@ -55,7 +55,7 @@ export function Counts() {
 					</div>
 				</div>
 			</div>
-			<div className='col-xl-3 col-md-6'>
+			<div className='col-xl-3 col-md-6 p-2'>
 				<div className='card card-stats'>
 					<div className='card-body'>
 						<div className='row'>
@@ -74,7 +74,7 @@ export function Counts() {
 					</div>
 				</div>
 			</div>
-			<div className='col-xl-3 col-md-6'>
+			<div className='col-xl-3 col-md-6 p-2'>
 				<div className='card card-stats'>
 					<div className='card-body'>
 						<div className='row'>
@@ -91,7 +91,7 @@ export function Counts() {
 					</div>
 				</div>
 			</div>
-			<div className='col-xl-3 col-md-6'>
+			<div className='col-xl-3 col-md-6 p-2'>
 				<div className='card card-stats'>
 					<div className='card-body'>
 						<div className='row'>
@@ -108,7 +108,7 @@ export function Counts() {
 					</div>
 				</div>
 			</div>
-			<div className='col-md-6'>
+			<div className='col-md-6 p-2'>
 				<div className='card card-stats'>
 					<div className='card-body'>
 						<div className='row'>
@@ -125,7 +125,7 @@ export function Counts() {
 					</div>
 				</div>
 			</div>
-			<div className='col-md-6'>
+			<div className='col-md-6 p-2'>
 				<div className='card card-stats'>
 					<div className='card-body'>
 						<div className='row'>

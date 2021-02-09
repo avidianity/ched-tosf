@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 import { Fee, TOSF } from '../../contracts';
-import { exceptMany, handleError } from '../../helpers';
+import { exceptMany, formatCurrency, handleError } from '../../helpers';
 import { Table } from '../Shared/Table';
 import toastr from 'toastr';
 import { groupBy } from 'lodash';
@@ -166,6 +166,9 @@ export function View() {
 							</p>
 							<p className='card-text'>
 								Approved By: <b>{tosf.approvedBy}</b>
+							</p>
+							<p className='card-text'>
+								Total: <b>{formatCurrency(tosf.fees.map((fee) => fee.amount.parseNumbers()).reduce((i, x) => i + x, 0))}</b>
 							</p>
 						</div>
 					</div>

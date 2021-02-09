@@ -79,7 +79,7 @@ router.post(
 		const data = req.body;
 
 		if (!req.file) {
-			throw new ValidationException(['Photo is required.']);
+			throw new ValidationException([{ msg: 'is required.', value: '', param: 'photo', location: 'body' }]);
 		}
 
 		const { mimetype: mimeType, size, path, filename: name } = req.file;

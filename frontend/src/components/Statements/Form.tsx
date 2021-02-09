@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { FormMode, Statement, StatementRow } from '../../contracts';
-import { exceptMany, handleError } from '../../helpers';
+import { FormMode, Statement, StatementRow, Student } from '../../contracts';
+import { exceptMany, formatCurrency, handleError } from '../../helpers';
 import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -23,6 +23,8 @@ export function Form() {
 	const [to, setTo] = useState('');
 	const [toAddress, setToAddress] = useState('');
 	const [rows, setRows] = useState<Array<Partial<StatementRow>>>([]);
+	const [students, setStudents] = useState<Array<Student>>([]);
+	const [total, setTotal] = useState('0');
 	const history = useHistory();
 
 	const submit = async () => {
@@ -51,6 +53,11 @@ export function Form() {
 		} finally {
 			setProcessing(false);
 		}
+	};
+
+	const calculateTotal = () => {
+		const total = rows.map((row) => row.amount!.parseNumbers()).reduce((i, x) => i + x, 0);
+		setTotal(formatCurrency(total));
 	};
 
 	const fetchStatement = async (statementID: string) => {
@@ -93,10 +100,19 @@ export function Form() {
 			history.goBack();
 		}
 	};
+	const fetchStudents = async () => {
+		try {
+			const { data } = await axios.get('/students');
+			setStudents([...data]);
+		} catch (error) {
+			handleError(error);
+		}
+	};
 
 	const { params, path } = useRouteMatch<{ id: string }>();
 
 	useEffect(() => {
+		fetchStudents();
 		if (path.includes('edit')) {
 			fetchStatement(params.id);
 		}
@@ -180,8 +196,27 @@ export function Form() {
 								className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 								disabled={processing}
 								value={to}
-								onChange={(e) => setTo(e.target.value)}
+								onChange={(e) => {
+									const student = students[Number(e.target.value)];
+
+									if (student !== undefined) {
+										setSchool(student.collegeSchoolName);
+										setSchoolAddress(student.collegeSchoolAddress);
+										setToAddress(student.address);
+										setTo(`${student.lastName}, ${student.firstName}`);
+									} else {
+										setTo(e.target.value);
+									}
+								}}
+								list='nameList'
 							/>
+							<datalist id='nameList'>
+								{students.map((student, index) => (
+									<option value={index} key={index}>
+										{`${student.lastName}, ${student.firstName}`}
+									</option>
+								))}
+							</datalist>
 						</div>
 						<div className='col-12 col-md-4 col-lg-3 p-2'>
 							<label htmlFor='to_address'>To Address:</label>
@@ -278,6 +313,18 @@ export function Form() {
 										disabled={processing}
 										value={dateTwo}
 										onChange={(e) => setDateTwo(e.target.value)}
+									/>
+								</div>
+								<div className='col-12 col-md-6 col-lg-4 p-2'>
+									<label htmlFor='total'>Total</label>
+									<input
+										type='text'
+										name='total'
+										id='total'
+										placeholder='Total'
+										className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
+										readOnly
+										value={total}
 									/>
 								</div>
 							</div>
@@ -391,6 +438,7 @@ export function Form() {
 																	row.amount = e.target.value;
 																	rows.splice(index, 1, row);
 																	setRows([...rows]);
+																	calculateTotal();
 																}}
 															/>
 														</td>

@@ -2,8 +2,8 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
-import { Statement } from '../../contracts';
-import { exceptMany, handleError } from '../../helpers';
+import { Statement, StatementRow } from '../../contracts';
+import { exceptMany, formatCurrency, handleError } from '../../helpers';
 import { Table } from '../Shared/Table';
 import toastr from 'toastr';
 import FileDownload from 'js-file-download';
@@ -46,6 +46,11 @@ export function View() {
 			console.log(error.toJSON());
 			toastr.error('Unable to delete statement.');
 		}
+	};
+
+	const calculateTotal = (rows: Array<StatementRow>) => {
+		const total = rows.map((row) => row.amount!.parseNumbers()).reduce((i, x) => i + x, 0);
+		return formatCurrency(total);
 	};
 
 	const func: any = () => {};
@@ -168,6 +173,9 @@ export function View() {
 										<p className='card-text'>
 											Date (2): <b>{dayjs(statement.dateTwo).format('MMMM DD, YYYY')}</b>
 										</p>
+									</div>
+									<div className='col-12 pt-4'>
+										<p className='card-text'>Total: {calculateTotal(statement.rows)}</p>
 									</div>
 								</div>
 							</div>

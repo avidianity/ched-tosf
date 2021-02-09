@@ -1,6 +1,8 @@
+import axios from 'axios';
 import dayjs from 'dayjs';
-import React, { Dispatch } from 'react';
-import { BillingDetailRow } from '../../../../contracts';
+import React, { Dispatch, useEffect, useState } from 'react';
+import { BillingDetailRow, Student } from '../../../../contracts';
+import { handleError } from '../../../../helpers';
 
 type Props = {
 	setRows: Dispatch<React.SetStateAction<Array<BillingDetailRow>>>;
@@ -11,6 +13,38 @@ type Props = {
 };
 
 export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: Props) {
+	const [students, setStudents] = useState<Array<Student>>([]);
+
+	const fetchStudents = async () => {
+		try {
+			const { data } = await axios.get('/students');
+			setStudents([...data]);
+		} catch (error) {
+			handleError(error);
+		}
+	};
+
+	const checkStudent = (index: number) => {
+		const row = rows[index];
+
+		const student = students.find((student) => student.firstName.includes(row.givenName) && student.lastName.includes(row.lastName));
+
+		if (student) {
+			row.middleInitial = student.middleName[0];
+			row.sex = student.sex;
+			row.email = student.email;
+			row.number = student.number;
+
+			rows.splice(index, 1, row);
+			setRows([...rows]);
+		}
+	};
+
+	useEffect(() => {
+		fetchStudents();
+		// eslint-disable-next-line
+	}, []);
+
 	return (
 		<div className='col-12'>
 			<div className='p-3'>
@@ -94,9 +128,16 @@ export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: 
 													row.lastName = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													checkStudent(index);
 												}}
 												value={row.lastName}
+												list='lastNameList'
 											/>
+											<datalist id='lastNameList'>
+												{students.map((student, index) => (
+													<option value={student.lastName} key={index} />
+												))}
+											</datalist>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='givenName'>Given Name:</label>
@@ -111,9 +152,16 @@ export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: 
 													row.givenName = e.target.value;
 													rows.splice(index, 1, row);
 													setRows([...rows]);
+													checkStudent(index);
 												}}
 												value={row.givenName}
+												list='firstNameList'
 											/>
+											<datalist id='firstNameList'>
+												{students.map((student, index) => (
+													<option value={student.firstName} key={index} />
+												))}
+											</datalist>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='middleInitial'>Middle Initial:</label>
@@ -131,6 +179,13 @@ export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: 
 												}}
 												value={row.middleInitial}
 											/>
+											<datalist id='lastNameList'>
+												{students.map((student, index) => (
+													<option value={student.middleName[0]} key={index}>
+														{student.middleName}
+													</option>
+												))}
+											</datalist>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='degreeProgram'>Degree Program:</label>

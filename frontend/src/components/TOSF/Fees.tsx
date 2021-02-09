@@ -1,5 +1,8 @@
+import axios from 'axios';
 import dayjs from 'dayjs';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Student } from '../../contracts';
+import { handleError } from '../../helpers';
 
 interface Fee {
 	type: FeeTypes;
@@ -23,6 +26,24 @@ type Props = {
 };
 
 export function Fees({ setFees, fees, processing, degrees }: Props) {
+	const [students, setStudents] = useState<Array<Student>>([]);
+
+	const fetchStudents = async () => {
+		try {
+			const { data } = await axios.get<Array<Student>>('/students');
+			setStudents([...data]);
+		} catch (error) {
+			handleError(error);
+		}
+	};
+
+	useEffect(() => {
+		fetchStudents();
+		// eslint-disable-next-line
+	}, []);
+
+	const setStudent = (index: number, student: Student) => {};
+
 	return (
 		<div className='col-12'>
 			<div className='p-3'>
@@ -116,7 +137,13 @@ export function Fees({ setFees, fees, processing, degrees }: Props) {
 													fees.splice(index, 1, fee);
 													setFees([...fees]);
 												}}
+												list='nameList'
 											/>
+											<datalist id='nameList'>
+												{students.map((student, index) => (
+													<option value={`${student.lastName}, ${student.firstName}`} key={index} />
+												))}
+											</datalist>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='amount'>Amount:</label>
@@ -138,7 +165,7 @@ export function Fees({ setFees, fees, processing, degrees }: Props) {
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='degrees'>Degrees:</label>
 											{degrees.map((degree, degreeIndex) => (
-												<div className='custom-control custom-checkbox'>
+												<div className='custom-control custom-checkbox' key={degreeIndex}>
 													<input
 														type='checkbox'
 														className={`custom-control-input ${processing ? 'disabled' : ''}`}
