@@ -1,5 +1,7 @@
-import React, { Dispatch } from 'react';
-import { BillingFormRow } from '../../../../contracts';
+import axios from 'axios';
+import React, { Dispatch, useEffect, useState } from 'react';
+import { BillingFormRow, Price, Student } from '../../../../contracts';
+import { formatCurrency, handleError } from '../../../../helpers';
 
 type Props = {
 	setRows: Dispatch<React.SetStateAction<Array<BillingFormRow>>>;
@@ -10,6 +12,43 @@ type Props = {
 };
 
 export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: Props) {
+	const [students, setStudents] = useState<Array<Student>>([]);
+	const [fees, setFees] = useState<Array<Price>>([]);
+
+	const fetchStudents = async () => {
+		try {
+			const { data } = await axios.get('/students');
+
+			setStudents([...data]);
+		} catch (error) {
+			handleError(error);
+		}
+	};
+
+	const fetchFees = async () => {
+		try {
+			const { data } = await axios.get('/prices');
+
+			setFees([...data]);
+		} catch (error) {
+			handleError(error);
+		}
+	};
+
+	const getFee = (keyword: string) => {
+		const fee = fees.find((fee) => fee.name.toLowerCase().includes(keyword.toLowerCase()));
+		if (fee) {
+			return formatCurrency(fee.amount.parseNumbers());
+		}
+		return formatCurrency(0);
+	};
+
+	useEffect(() => {
+		fetchStudents();
+		fetchFees();
+		// eslint-disable-next-line
+	}, []);
+
 	return (
 		<div className='col-12'>
 			<div className='p-3'>
@@ -39,20 +78,20 @@ export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: 
 										computerLabUnits: 'N\\A',
 										unitsEnrolled: 'N\\A',
 										nstpUnitsEnrolled: 'N\\A',
-										tuitionFee: 'N\\A',
-										nstpFee: 'N\\A',
-										athleticFees: 'N\\A',
-										computerFees: 'N\\A',
-										culturalFees: 'N\\A',
-										developmentFees: 'N\\A',
-										admissionFees: 'N\\A',
-										guidanceFees: 'N\\A',
-										handbookFees: 'N\\A',
-										laboratoryFees: 'N\\A',
-										libraryFee: 'N\\A',
-										medicalFees: 'N\\A',
-										registrationFees: 'N\\A',
-										schoolIDFees: 'N\\A',
+										tuitionFee: getFee('tuition'),
+										nstpFee: getFee('nstp'),
+										athleticFees: getFee('athletic'),
+										computerFees: getFee('computer'),
+										culturalFees: getFee('cultural'),
+										developmentFees: getFee('development'),
+										admissionFees: getFee('admission'),
+										guidanceFees: getFee('guidance'),
+										handbookFees: getFee('handbook'),
+										laboratoryFees: getFee('laboratory'),
+										libraryFee: getFee('library'),
+										medicalFees: getFee('medical'),
+										registrationFees: getFee('registration'),
+										schoolIDFees: getFee('school id'),
 										totalTOSF: '',
 									} as BillingFormRow,
 								]);
@@ -108,12 +147,33 @@ export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: 
 												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 												disabled={processing}
 												onChange={(e) => {
-													row.studentNumber = e.target.value;
-													rows.splice(index, 1, row);
-													setRows([...rows]);
+													const fragments = e.target.value.split(':');
+													if (
+														fragments.length === 2 &&
+														fragments[0] === 'sid' &&
+														Number.isInteger(Number(fragments[1]))
+													) {
+														const student = students[Number(fragments[1])];
+
+														row.studentNumber = student.idNumber;
+														rows.splice(index, 1, row);
+														setRows([...rows]);
+													} else {
+														row.studentNumber = e.target.value;
+														rows.splice(index, 1, row);
+														setRows([...rows]);
+													}
 												}}
 												value={row.studentNumber}
+												list='idNumberList'
 											/>
+											<datalist id='idNumberList'>
+												{students.map((student, index) => (
+													<option value={`sid:${index}`} key={index}>
+														{student.idNumber} - {`${student.lastName}, ${student.firstName}`}
+													</option>
+												))}
+											</datalist>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='referenceNumber'>Reference Number:</label>
@@ -125,12 +185,33 @@ export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: 
 												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 												disabled={processing}
 												onChange={(e) => {
-													row.referenceNumber = e.target.value;
-													rows.splice(index, 1, row);
-													setRows([...rows]);
+													const fragments = e.target.value.split(':');
+													if (
+														fragments.length === 2 &&
+														fragments[0] === 'sid' &&
+														Number.isInteger(Number(fragments[1]))
+													) {
+														const student = students[Number(fragments[1])];
+
+														row.referenceNumber = student.lrn;
+														rows.splice(index, 1, row);
+														setRows([...rows]);
+													} else {
+														row.referenceNumber = e.target.value;
+														rows.splice(index, 1, row);
+														setRows([...rows]);
+													}
 												}}
 												value={row.referenceNumber}
+												list='lrnList'
 											/>
+											<datalist id='lrnList'>
+												{students.map((student, index) => (
+													<option value={`sid:${index}`} key={index}>
+														{student.lrn} - {`${student.lastName}, ${student.firstName}`}
+													</option>
+												))}
+											</datalist>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='lastName'>Last Name:</label>
@@ -142,12 +223,33 @@ export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: 
 												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 												disabled={processing}
 												onChange={(e) => {
-													row.lastName = e.target.value;
-													rows.splice(index, 1, row);
-													setRows([...rows]);
+													const fragments = e.target.value.split(':');
+													if (
+														fragments.length === 2 &&
+														fragments[0] === 'sid' &&
+														Number.isInteger(Number(fragments[1]))
+													) {
+														const student = students[Number(fragments[1])];
+
+														row.lastName = student.lastName;
+														rows.splice(index, 1, row);
+														setRows([...rows]);
+													} else {
+														row.lastName = e.target.value;
+														rows.splice(index, 1, row);
+														setRows([...rows]);
+													}
 												}}
 												value={row.lastName}
+												list='lastNameList'
 											/>
+											<datalist id='lastNameList'>
+												{students.map((student, index) => (
+													<option value={`sid:${index}`} key={index}>
+														{student.lastName}
+													</option>
+												))}
+											</datalist>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='givenName'>Given Name:</label>
@@ -159,12 +261,33 @@ export function Rows({ rows, setRows, processing, onFeeChanged, onRowRemoved }: 
 												className={`form-control form-control-sm ${processing ? 'disabled' : ''}`}
 												disabled={processing}
 												onChange={(e) => {
-													row.givenName = e.target.value;
-													rows.splice(index, 1, row);
-													setRows([...rows]);
+													const fragments = e.target.value.split(':');
+													if (
+														fragments.length === 2 &&
+														fragments[0] === 'sid' &&
+														Number.isInteger(Number(fragments[1]))
+													) {
+														const student = students[Number(fragments[1])];
+
+														row.givenName = student.firstName;
+														rows.splice(index, 1, row);
+														setRows([...rows]);
+													} else {
+														row.givenName = e.target.value;
+														rows.splice(index, 1, row);
+														setRows([...rows]);
+													}
 												}}
 												value={row.givenName}
+												list='firstNameList'
 											/>
+											<datalist id='firstNameList'>
+												{students.map((student, index) => (
+													<option value={`sid:${index}`} key={index}>
+														{student.firstName} {student.lastName}
+													</option>
+												))}
+											</datalist>
 										</div>
 										<div className='col-12 col-md-4 col-lg-3 form-group'>
 											<label htmlFor='middleInitial'>Middle Initial:</label>
