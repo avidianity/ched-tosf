@@ -42,8 +42,6 @@ export function Fees({ setFees, fees, processing, degrees }: Props) {
 		// eslint-disable-next-line
 	}, []);
 
-	const setStudent = (index: number, student: Student) => {};
-
 	return (
 		<div className='col-12'>
 			<div className='p-3'>

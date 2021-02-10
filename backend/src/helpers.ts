@@ -45,9 +45,7 @@ export namespace Validation {
 					},
 				});
 				if (exists) {
-					return Promise.reject(
-						message ? message : `${String.ucfirst(key as string)} is already taken. Did you mean to sign in?`
-					);
+					return Promise.reject(message ? message : `${String.ucfirst(key as string)} is already taken.`);
 				}
 				return true;
 			} catch (error) {

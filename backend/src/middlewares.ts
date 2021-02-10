@@ -18,7 +18,7 @@ export function errorHandler(error: any, _req: Request, res: Response, _next: Ne
  */
 export function auth(callback?: Function | Function[] | Router | Router[]) {
 	const middlewares = [
-		(req: Request, _res: Response, next: NextFunction) => {
+		(_req: Request, _res: Response, next: NextFunction) => {
 			passport.use(
 				new Strategy(async (hash, done) => {
 					try {
