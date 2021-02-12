@@ -22,7 +22,7 @@ exports.errorHandler = errorHandler;
  */
 function auth(callback) {
     const middlewares = [
-        (req, _res, next) => {
+        (_req, _res, next) => {
             passport_1.default.use(new passport_http_bearer_1.Strategy(async (hash, done) => {
                 try {
                     let token = await Token_1.Token.findOne({

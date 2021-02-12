@@ -50,7 +50,7 @@ var Validation;
                     },
                 });
                 if (exists) {
-                    return Promise.reject(message ? message : `${String.ucfirst(key)} is already taken. Did you mean to sign in?`);
+                    return Promise.reject(message ? message : `${String.ucfirst(key)} is already taken.`);
                 }
                 return true;
             }
