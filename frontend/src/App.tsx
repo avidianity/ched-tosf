@@ -50,10 +50,10 @@ export function App() {
 					<UserContext.Provider
 						value={{
 							user,
-							setUser: makeMask(setUser, (user: User | null) => state.set('user', user || null)),
+							setUser: makeMask(setUser, (user: User | null) => state.set('user', user)),
 							isLogged,
 							token,
-							setToken: makeMask(setToken, (token: string | null) => state.set('token', token || null)),
+							setToken: makeMask(setToken, (token: string | null) => state.set('token', token)),
 						}}>
 						<Route path='/' exact component={FZF} />
 						<Route path={routes.DASHBOARD} component={Dashboard} />

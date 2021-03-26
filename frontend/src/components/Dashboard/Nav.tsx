@@ -2,18 +2,18 @@ import Axios from 'axios';
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../../contexts';
 import toastr from 'toastr';
-import { useHistory } from 'react-router-dom';
 import { routes } from '../../routes';
+import state from '../../state';
+import { History } from 'history';
 
 type Props = {
 	onSearch?: (query: string) => void;
+	history: History<unknown>;
 };
 
-export function Nav(props: Props) {
+export function Nav({ history, onSearch }: Props) {
 	const { setUser, setToken } = useContext(UserContext);
 	const [query, setQuery] = useState('');
-
-	const history = useHistory();
 
 	const logout = async () => {
 		try {
@@ -22,9 +22,11 @@ export function Nav(props: Props) {
 			console.log(error.toJSON());
 		} finally {
 			toastr.success('Logged out successfully.');
+			state.set('logged', false);
 			setUser(null);
 			setToken(null);
 			history.push(routes.LOGIN);
+			window.location.reload();
 		}
 	};
 
@@ -48,8 +50,8 @@ export function Nav(props: Props) {
 							onChange={(e) => setQuery(e.target.value)}
 							onKeyPress={(e) => {
 								const code = e.nativeEvent.code;
-								if ((code === 'Enter' || code === 'NumpadEnter') && props.onSearch) {
-									props.onSearch(query);
+								if ((code === 'Enter' || code === 'NumpadEnter') && onSearch) {
+									onSearch(query);
 									setQuery('');
 								}
 							}}

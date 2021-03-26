@@ -26,7 +26,7 @@ export function Dashboard() {
 			<div className='main-content' id='panel'>
 				<nav className='navbar navbar-top navbar-expand navbar-dark bg-primary border-bottom'>
 					<div className='container-fluid'>
-						<Nav />
+						<Nav history={history} />
 					</div>
 				</nav>
 				<div className='header bg-primary pb-3 mb-5'>
