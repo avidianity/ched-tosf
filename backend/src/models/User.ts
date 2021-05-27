@@ -15,12 +15,11 @@ export class User extends Model {
 	@OneToMany(() => Token, (token) => token.user)
 	tokens: Array<Token>;
 
+	@Column({ default: 'Admin' })
+	role: string;
+
 	@BeforeRemove()
 	async removeTokens() {
-		await Token.getRepository()
-			.createQueryBuilder()
-			.where('userId = :id', { id: this.id })
-			.delete()
-			.execute();
+		await Token.getRepository().createQueryBuilder().where('userId = :id', { id: this.id }).delete().execute();
 	}
 }

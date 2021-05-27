@@ -21,6 +21,7 @@ import { auth as a, errorHandler } from './middlewares';
 import 'express-async-errors';
 import path from 'path';
 import passport from 'passport';
+import { user } from './routes/user';
 
 const app = express();
 
@@ -61,6 +62,8 @@ app.use('/api/students', ...a(student));
 app.use('/api/files', ...a(file));
 
 app.use('/api/counts', ...a(count));
+
+app.use('/api/users', ...a(user));
 
 app.use((_req, res) => {
 	return res.status(404).end();

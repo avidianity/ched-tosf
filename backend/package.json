@@ -8,7 +8,7 @@
 		"dev": "ts-node-dev --respawn src/server.ts",
 		"build": "tsc",
 		"start": "tsc && node dist/server.js",
-		"seed": "node dist/seed.js"
+		"seed": "ts-node-dev src/seed.ts"
 	},
 	"keywords": [],
 	"author": "",

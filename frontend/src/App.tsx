@@ -12,7 +12,7 @@ import state from './state';
 import { makeMask } from './helpers';
 import { FZF } from './components/Shared/FZF';
 
-Axios.defaults.baseURL = `${process.env.REACT_APP_BACKEND_URL}/api`;
+Axios.defaults.baseURL = `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'}/api`;
 Axios.defaults.headers.common['Accept'] = 'application/json';
 Axios.interceptors.request.use((config) => {
 	if (state.has('token')) {

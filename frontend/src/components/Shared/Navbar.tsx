@@ -42,7 +42,7 @@ export function Navbar() {
 							</li>
 							<li className='nav-item'>
 								<NavLink activeClassName='active' to={path(routes.BILLING.DETAILS)} className='nav-link'>
-									<i className='ni ni-compass-04 text-danger'></i>
+									<i className='ni ni-compass-04 text-green'></i>
 									<span className='nav-link-text'>Billing Details</span>
 								</NavLink>
 							</li>
@@ -54,8 +54,14 @@ export function Navbar() {
 							</li>
 							<li className='nav-item'>
 								<NavLink activeClassName='active' to={path(routes.STUDENTS)} className='nav-link'>
-									<i className='ni ni-circle-08 text-danger'></i>
+									<i className='ni ni-circle-08 text-blue'></i>
 									<span className='nav-link-text'>Students</span>
+								</NavLink>
+							</li>
+							<li className='nav-item'>
+								<NavLink activeClassName='active' to={path(routes.USERS)} className='nav-link'>
+									<i className='ni ni-circle-08 text-info'></i>
+									<span className='nav-link-text'>Users</span>
 								</NavLink>
 							</li>
 							{/* <li className='nav-item'>

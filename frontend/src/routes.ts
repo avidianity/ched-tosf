@@ -11,4 +11,5 @@ export const routes = {
 	FILES: '/files',
 	FEES: '/fees',
 	STUDENTS: '/students',
+	USERS: '/users',
 };
