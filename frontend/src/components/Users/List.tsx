@@ -4,7 +4,6 @@ import { User } from '../../contracts';
 import { Table } from '../Shared/Table';
 import toastr from 'toastr';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import { onlyMany } from '../../helpers';
 
 export function List() {
 	const [users, setUsers] = useState<Array<User>>([]);

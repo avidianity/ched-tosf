@@ -106,6 +106,7 @@ export function Form() {
 								<option value='Registration Fee'>Registration Fee</option>
 								<option value='Admission Fee'>Admission Fee</option>
 								<option value='Entrance Fee'>Entrance Fee</option>
+								<option value='Assessment Fee'>Assessment Fee</option>
 								<option value='Others'>Others</option>
 							</select>
 						</div>

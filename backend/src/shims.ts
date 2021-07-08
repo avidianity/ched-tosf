@@ -21,6 +21,7 @@ declare global {
 		| 'Registration Fee'
 		| 'Admission Fee'
 		| 'Entrance Fee'
+		| 'Assessment Fee'
 		| 'Others';
 }
 
